@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="ZMSL.App.Views.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <!-- 左侧品牌区域 -->
+        <Grid Grid.Column="0" Background="{ThemeResource SystemAccentColorDark2}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="24">
+                <FontIcon Glyph="&#xE7FC;" FontSize="80" Foreground="White"/>
+                <TextBlock Text="ZMSL" FontSize="48" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                <TextBlock Text="我的世界服务器启动器" FontSize="20" Foreground="White" Opacity="0.9" HorizontalAlignment="Center"/>
+                <TextBlock Text="轻松管理您的 Minecraft 服务器" FontSize="14" Foreground="White" Opacity="0.7" HorizontalAlignment="Center" Margin="0,16,0,0"/>
+            </StackPanel>
+        </Grid>
+        
+        <!-- 右侧登录表单区域 -->
+        <Grid Grid.Column="1">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="360" Spacing="24">
+                <TextBlock x:Name="TitleText" Text="欢迎回来" FontSize="32" FontWeight="Bold"/>
+                <TextBlock Text="登录您的账户以继续" FontSize="14" Opacity="0.7" Margin="0,-16,0,0"/>
+
+                <!-- 错误/成功消息 -->
+                <InfoBar x:Name="MessageBar" IsOpen="False" IsClosable="True"/>
+
+                <!-- 登录表单 -->
+                <StackPanel x:Name="LoginPanel" Spacing="16">
+                    <TextBox x:Name="UsernameBox" PlaceholderText="输入用户名" Header="用户名"/>
+                    <PasswordBox x:Name="PasswordBox" PlaceholderText="输入密码" Header="密码"/>
+                    
+                    <CheckBox x:Name="RememberMeCheckBox" Content="保持登录状态"/>
+
+                    <Button Content="登录" Style="{StaticResource AccentButtonStyle}" 
+                            HorizontalAlignment="Stretch" Height="40" Click="Login_Click" Margin="0,8,0,0"/>
+                </StackPanel>
+
+                <ProgressRing x:Name="LoadingRing" IsActive="False" Width="32" Height="32"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

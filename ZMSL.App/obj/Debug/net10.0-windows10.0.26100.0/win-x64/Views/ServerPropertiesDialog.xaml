@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentDialog x:ConnectionId='1'
+    x:Class="ZMSL.App.Views.ServerPropertiesDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="游戏设置"
+    PrimaryButtonText="保存"
+    CloseButtonText="取消"
+    DefaultButton="Primary"
+                                   >
+
+    <ScrollViewer Width="600" Height="500" VerticalScrollBarVisibility="Auto">
+        <StackPanel Spacing="16" Padding="0,0,16,0">
+            <!-- 基础设置 -->
+            <StackPanel>
+                <TextBlock Text="基础设置" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                <Grid RowSpacing="10" ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <ComboBox x:ConnectionId='22' x:Name="GamemodeCombo" Header="游戏模式" HorizontalAlignment="Stretch">
+                        <ComboBoxItem Content="生存 (survival)" Tag="survival"/>
+                        <ComboBoxItem Content="创造 (creative)" Tag="creative"/>
+                        <ComboBoxItem Content="冒险 (adventure)" Tag="adventure"/>
+                        <ComboBoxItem Content="旁观 (spectator)" Tag="spectator"/>
+                    </ComboBox>
+                    <ComboBox x:ConnectionId='23' x:Name="DifficultyCombo" Header="难度" Grid.Column="1" HorizontalAlignment="Stretch">
+                        <ComboBoxItem Content="和平 (peaceful)" Tag="peaceful"/>
+                        <ComboBoxItem Content="简单 (easy)" Tag="easy"/>
+                        <ComboBoxItem Content="普通 (normal)" Tag="normal"/>
+                        <ComboBoxItem Content="困难 (hard)" Tag="hard"/>
+                    </ComboBox>
+
+                    <NumberBox x:ConnectionId='24' x:Name="MaxPlayersBox" Header="最大玩家数" Value="20" Grid.Row="1"/>
+                    <NumberBox x:ConnectionId='25' x:Name="ServerPortBox" Header="服务器端口" Value="25565" Grid.Row="1" Grid.Column="1"/>
+
+                    <TextBox x:ConnectionId='26' x:Name="MotdBox" Header="服务器标语 (MOTD)" PlaceholderText="A Minecraft Server" Grid.Row="2" Grid.ColumnSpan="2"/>
+                </Grid>
+            </StackPanel>
+
+            <!-- 世界设置 -->
+            <StackPanel>
+                <TextBlock Text="世界设置" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                <Grid RowSpacing="10" ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBox x:ConnectionId='16' x:Name="LevelNameBox" Header="世界名称"/>
+                    <TextBox x:ConnectionId='17' x:Name="LevelSeedBox" Header="地图种子" PlaceholderText="留空随机" Grid.Column="1"/>
+
+                    <ComboBox x:ConnectionId='18' x:Name="LevelTypeCombo" Header="世界类型" Grid.Row="1" HorizontalAlignment="Stretch">
+                        <ComboBoxItem Content="正常" Tag="minecraft:normal"/>
+                        <ComboBoxItem Content="超平坦" Tag="minecraft:flat"/>
+                        <ComboBoxItem Content="超大生物群系" Tag="minecraft:large_biomes"/>
+                        <ComboBoxItem Content="放大化" Tag="minecraft:amplified"/>
+                    </ComboBox>
+
+                    <NumberBox x:ConnectionId='19' x:Name="ViewDistanceBox" Header="视距 (区块)" Value="10" Grid.Row="1" Grid.Column="1"/>
+                    <NumberBox x:ConnectionId='20' x:Name="SimDistanceBox" Header="模拟距离 (区块)" Value="10" Grid.Row="2"/>
+                    <NumberBox x:ConnectionId='21' x:Name="SpawnProtectionBox" Header="出生点保护半径" Value="16" Grid.Row="2" Grid.Column="1"/>
+                </Grid>
+            </StackPanel>
+
+            <!-- 游戏规则 -->
+            <StackPanel>
+                <TextBlock Text="游戏规则" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                <Grid RowSpacing="6" ColumnSpacing="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <ToggleSwitch x:ConnectionId='6' x:Name="PvpToggle" Header="允许PVP" OnContent="开" OffContent="关"/>
+                    <ToggleSwitch x:ConnectionId='7' x:Name="HardcoreToggle" Header="硬核模式" OnContent="开" OffContent="关" Grid.Column="1"/>
+                    
+                    <ToggleSwitch x:ConnectionId='8' x:Name="AllowFlightToggle" Header="允许飞行" OnContent="开" OffContent="关" Grid.Row="1"/>
+                    <ToggleSwitch x:ConnectionId='9' x:Name="AllowNetherToggle" Header="允许地狱" OnContent="开" OffContent="关" Grid.Row="1" Grid.Column="1"/>
+
+                    <ToggleSwitch x:ConnectionId='10' x:Name="SpawnMonstersToggle" Header="生成怪物" OnContent="开" OffContent="关" Grid.Row="2"/>
+                    <ToggleSwitch x:ConnectionId='11' x:Name="SpawnAnimalsToggle" Header="生成动物" OnContent="开" OffContent="关" Grid.Row="2" Grid.Column="1"/>
+
+                    <ToggleSwitch x:ConnectionId='12' x:Name="SpawnNpcsToggle" Header="生成村民" OnContent="开" OffContent="关" Grid.Row="3"/>
+                    <ToggleSwitch x:ConnectionId='13' x:Name="GenerateStructuresToggle" Header="生成建筑" OnContent="开" OffContent="关" Grid.Row="3" Grid.Column="1"/>
+
+                    <ToggleSwitch x:ConnectionId='14' x:Name="CommandBlockToggle" Header="命令方块" OnContent="开" OffContent="关" Grid.Row="4"/>
+                    <ToggleSwitch x:ConnectionId='15' x:Name="ForceGamemodeToggle" Header="强制游戏模式" OnContent="开" OffContent="关" Grid.Row="4" Grid.Column="1"/>
+                </Grid>
+            </StackPanel>
+
+            <!-- 网络设置 -->
+            <StackPanel>
+                <TextBlock Text="网络设置" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                <Grid RowSpacing="6" ColumnSpacing="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <ToggleSwitch x:ConnectionId='2' x:Name="OnlineModeToggle" Header="正版验证" OnContent="开" OffContent="关"/>
+                    <ToggleSwitch x:ConnectionId='3' x:Name="WhitelistToggle" Header="白名单" OnContent="开" OffContent="关" Grid.Column="1"/>
+                    
+                    <ToggleSwitch x:ConnectionId='4' x:Name="EnableQueryToggle" Header="启用查询" OnContent="开" OffContent="关" Grid.Row="1"/>
+                    <ToggleSwitch x:ConnectionId='5' x:Name="EnableRconToggle" Header="启用RCON" OnContent="开" OffContent="关" Grid.Row="1" Grid.Column="1"/>
+                </Grid>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</ContentDialog>
+

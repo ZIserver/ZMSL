@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AppxManifestValidation xmlns="http://schemas.microsoft.com/appx/manifest/validation/windows10">
+  <DisabledTests>
+    <!-- 禁用 Windows 10 S 可执行文件检查 -->
+    <Test Name="BlockedExecutables" />
+  </DisabledTests>
+</AppxManifestValidation>

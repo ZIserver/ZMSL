@@ -1,0 +1,11 @@
+D:\Desktop\ZMSL\ZMSL.Shared\bin\x64\Release\net10.0\ZMSL.Shared.deps.json
+D:\Desktop\ZMSL\ZMSL.Shared\bin\x64\Release\net10.0\ZMSL.Shared.dll
+D:\Desktop\ZMSL\ZMSL.Shared\bin\x64\Release\net10.0\ZMSL.Shared.pdb
+D:\Desktop\ZMSL\ZMSL.Shared\obj\x64\Release\net10.0\ZMSL.Shared.GeneratedMSBuildEditorConfig.editorconfig
+D:\Desktop\ZMSL\ZMSL.Shared\obj\x64\Release\net10.0\ZMSL.Shared.AssemblyInfoInputs.cache
+D:\Desktop\ZMSL\ZMSL.Shared\obj\x64\Release\net10.0\ZMSL.Shared.AssemblyInfo.cs
+D:\Desktop\ZMSL\ZMSL.Shared\obj\x64\Release\net10.0\ZMSL.Shared.csproj.CoreCompileInputs.cache
+D:\Desktop\ZMSL\ZMSL.Shared\obj\x64\Release\net10.0\ZMSL.Shared.dll
+D:\Desktop\ZMSL\ZMSL.Shared\obj\x64\Release\net10.0\refint\ZMSL.Shared.dll
+D:\Desktop\ZMSL\ZMSL.Shared\obj\x64\Release\net10.0\ZMSL.Shared.pdb
+D:\Desktop\ZMSL\ZMSL.Shared\obj\x64\Release\net10.0\ref\ZMSL.Shared.dll

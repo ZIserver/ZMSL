@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Page x:ConnectionId='1'
+    x:Class="ZMSL.App.Views.BeginnerModePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                        >
+
+    <Grid Padding="24,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 标题栏 -->
+        <Grid Margin="0,0,0,24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Border Background="{ThemeResource SystemFillColorSuccessBackgroundBrush}" 
+                        CornerRadius="8" Width="40" Height="40" VerticalAlignment="Center">
+                    <FontIcon Glyph="&#xE9D9;" Foreground="{ThemeResource SystemFillColorSuccessBrush}" FontSize="20"/>
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="小白模式" FontSize="20" FontWeight="Bold"/>
+                    <TextBlock Text="简单配置，快速创建" FontSize="12" Opacity="0.6"/>
+                </StackPanel>
+            </StackPanel>
+            
+            <!-- 步骤指示器 -->
+            <StackPanel Grid.Column="2" Orientation="Horizontal" 
+                       Spacing="6" VerticalAlignment="Center">
+                <Border Width="28" Height="3" Background="{ThemeResource AccentFillColorDefaultBrush}" CornerRadius="1.5"/>
+                <Border Width="28" Height="3" Background="{ThemeResource CardStrokeColorDefaultBrush}" CornerRadius="1.5"/>
+                <Border Width="28" Height="3" Background="{ThemeResource CardStrokeColorDefaultBrush}" CornerRadius="1.5"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- 配置内容 -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <Grid HorizontalAlignment="Stretch" Margin="40,0">
+                <StackPanel Spacing="20">
+                    
+                    <!-- 服务器名称 -->
+                    <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                            CornerRadius="8" Padding="20" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                            BorderThickness="1">
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="服务器名称" FontSize="16" FontWeight="SemiBold"/>
+                            <TextBox x:ConnectionId='22' x:Name="ServerNameTextBox" PlaceholderText="请输入服务器名称" 
+                                     Text="我的Minecraft服务器" FontSize="14"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- 玩家人数选择 -->
+                    <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                            CornerRadius="8" Padding="20" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                            BorderThickness="1">
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="预计玩家人数" FontSize="16" FontWeight="SemiBold"/>
+                            <TextBlock Text="系统将根据人数自动分配合适内存" FontSize="13" Opacity="0.7" Margin="0,0,0,8"/>
+                            
+                            <RadioButtons x:ConnectionId='21' x:Name="PlayerCountRadioButtons" SelectedIndex="0" 
+                                                                                                     >
+                                <RadioButton Content="1-10人 (推荐1GB内存)" Tag="10"/>
+                                <RadioButton Content="10-20人 (推荐2GB内存)" Tag="20"/>
+                                <RadioButton Content="20-50人 (推荐4GB内存)" Tag="50"/>
+                            </RadioButtons>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- 核心选择 -->
+                    <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                            CornerRadius="8" Padding="20" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                            BorderThickness="1">
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="服务端核心" FontSize="16" FontWeight="SemiBold"/>
+                            <ToggleSwitch x:ConnectionId='10' x:Name="UsePurpurToggle" Header="使用Purpur最新版本（推荐）" 
+                                                                           />
+                            
+                            <!-- 自定义核心选择 -->
+                            <Grid x:ConnectionId='11' x:Name="CustomCoreGrid" Visibility="Collapsed">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200"/>
+                                    <ColumnDefinition Width="16"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="16"/>
+                                    <ColumnDefinition Width="300"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <!-- 左侧：核心分类 -->
+                                <StackPanel Grid.Column="0" Spacing="8">
+                                    <TextBlock Text="核心分类" FontSize="13" FontWeight="SemiBold" Opacity="0.7" Margin="0,0,0,8"/>
+                                    <ScrollViewer MaxHeight="300" VerticalScrollBarVisibility="Auto">
+                                        <ItemsControl x:ConnectionId='19' x:Name="CoreCategoriesPanel">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Button x:ConnectionId='20'                        Tag="{Binding Name}" 
+                                                            HorizontalAlignment="Stretch" Padding="12,8" Margin="0,0,0,4"
+                                                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                                            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                                            BorderThickness="1" CornerRadius="6">
+                                                        <TextBlock Text="{Binding DisplayName}" FontSize="13"/>
+                                                    </Button>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                </StackPanel>
+                                
+                                <!-- 中间：核心列表 -->
+                                <Border Grid.Column="2" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                                        CornerRadius="8" Padding="16" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                                        BorderThickness="1">
+                                    <StackPanel Spacing="8">
+                                        <TextBlock x:ConnectionId='16' x:Name="SelectedCategoryText" Text="请选择分类" FontSize="13" FontWeight="SemiBold" Opacity="0.7"/>
+                                        <ScrollViewer MaxHeight="250" VerticalScrollBarVisibility="Auto">
+                                            <ItemsControl x:ConnectionId='17' x:Name="CoreListView">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Button x:ConnectionId='18'                    Tag="{Binding}" 
+                                                                HorizontalAlignment="Stretch" Padding="12,8" Margin="0,0,0,4"
+                                                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                                                BorderThickness="1" CornerRadius="6">
+                                                            <TextBlock Text="{Binding}" FontSize="13"/>
+                                                        </Button>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+                                    </StackPanel>
+                                </Border>
+                                
+                                <!-- 右侧：版本列表 -->
+                                <Border x:ConnectionId='12' x:Name="VersionSelectionBorder" Grid.Column="4"
+                                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                                        CornerRadius="8" Padding="16" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                                        BorderThickness="1" Visibility="Collapsed">
+                                    <StackPanel Spacing="8">
+                                        <TextBlock x:ConnectionId='13' x:Name="SelectedCoreDisplayText" Text="选择版本" FontSize="13" FontWeight="SemiBold" Opacity="0.7"/>
+                                        <ScrollViewer MaxHeight="250" VerticalScrollBarVisibility="Auto">
+                                            <ItemsControl x:ConnectionId='14' x:Name="VersionListView">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Button x:ConnectionId='15'                       Tag="{Binding}" 
+                                                                HorizontalAlignment="Stretch" Padding="12,8" Margin="0,0,0,4"
+                                                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                                                                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                                                                BorderThickness="1" CornerRadius="6">
+                                                            <TextBlock Text="{Binding}" FontSize="13"/>
+                                                        </Button>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Java环境 -->
+                    <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                            CornerRadius="8" Padding="20" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                            BorderThickness="1">
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="Java 运行时" FontSize="16" FontWeight="SemiBold"/>
+                            <TextBlock Text="系统已自动选择合适的Java版本" FontSize="13" Opacity="0.7"/>
+                            
+                            <Border Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}" 
+                                    CornerRadius="8" Padding="16">
+                                <TextBlock x:ConnectionId='9' x:Name="JavaInfoText" Text="检测中..." 
+                                           FontSize="13" TextWrapping="Wrap" Opacity="0.8"/>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- 配置预览 -->
+                    <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                            CornerRadius="8" Padding="20" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                            BorderThickness="1">
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="配置预览" FontSize="16" FontWeight="SemiBold"/>
+                            <StackPanel Spacing="8">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <FontIcon Glyph="&#xE8FD;" FontSize="14" Opacity="0.6"/>
+                                    <TextBlock x:ConnectionId='8' x:Name="PreviewCoreText" Text="核心: Purpur (最新版本)" FontSize="13"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <FontIcon Glyph="&#xE943;" FontSize="14" Opacity="0.6"/>
+                                    <TextBlock x:ConnectionId='7' x:Name="PreviewJavaText" Text="Java: 检测中..." FontSize="13"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <FontIcon Glyph="&#xE90A;" FontSize="14" Opacity="0.6"/>
+                                    <TextBlock x:ConnectionId='6' x:Name="PreviewMemoryText" Text="内存: 1GB" FontSize="13"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <FontIcon Glyph="&#xE716;" FontSize="14" Opacity="0.6"/>
+                                    <TextBlock x:ConnectionId='5' x:Name="PreviewPlayersText" Text="预计玩家: 1-10人" FontSize="13"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+
+        <!-- 底部按钮栏 -->
+        <Grid Grid.Row="2" Margin="0,24,0,0" 
+              Background="{ThemeResource LayerFillColorDefaultBrush}"
+              BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+              BorderThickness="0,1,0,0" Padding="16">
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Button x:ConnectionId='3'                          Padding="16,10">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <FontIcon Glyph="&#xE72B;" FontSize="14"/>
+                            <TextBlock Text="返回" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Button x:ConnectionId='4'                            Padding="16,10">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <FontIcon Glyph="&#xE711;" FontSize="14"/>
+                            <TextBlock Text="取消" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                
+                <Button x:ConnectionId='2' x:Name="NextButton" Grid.Column="1"
+                                                 
+                        Style="{StaticResource AccentButtonStyle}" 
+                        Padding="24,10" MinWidth="120">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="下一步" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                        <FontIcon Glyph="&#xE72A;" FontSize="14"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>
+

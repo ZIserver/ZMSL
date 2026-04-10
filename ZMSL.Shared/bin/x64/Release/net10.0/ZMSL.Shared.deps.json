@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "ZMSL.Shared/3.1.0": {
+        "runtime": {
+          "ZMSL.Shared.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ZMSL.Shared/3.1.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

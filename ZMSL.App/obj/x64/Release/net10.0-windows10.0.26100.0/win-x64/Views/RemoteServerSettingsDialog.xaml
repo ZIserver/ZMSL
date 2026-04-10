@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentDialog x:ConnectionId='1'
+    x:Class="ZMSL.App.Views.RemoteServerSettingsDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="服务器设置"
+    PrimaryButtonText="保存"
+    CloseButtonText="取消"
+    DefaultButton="Primary"
+                                   >
+
+    <ScrollViewer Width="500" Height="450" VerticalScrollBarVisibility="Auto">
+        <StackPanel Spacing="16" Padding="0,0,12,0">
+            <!-- 基本信息 -->
+            <StackPanel>
+                <TextBlock Text="基本信息" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                <TextBox x:ConnectionId='13' x:Name="ServerNameBox" Header="服务器名称"/>
+                <Grid Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:ConnectionId='14' x:Name="McVersionBox" Header="MC版本" Margin="0,0,8,0"/>
+                    <TextBox x:ConnectionId='15' x:Name="CoreTypeBox" Header="核心类型" Grid.Column="1"/>
+                </Grid>
+            </StackPanel>
+
+            <!-- 启动核心 -->
+            <StackPanel>
+                <TextBlock Text="启动核心" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:ConnectionId='11' x:Name="JarFileBox" Header="JAR文件名"/>
+                    <Button x:ConnectionId='12' Content="选择" Grid.Column="1" VerticalAlignment="Bottom" Margin="8,0,0,0"                        />
+                </Grid>
+                <TextBlock Text="请确保JAR文件已上传到服务器目录" Opacity="0.6" FontSize="11" TextWrapping="Wrap" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <!-- Java设置 -->
+            <StackPanel>
+                <TextBlock Text="Java设置" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox x:ConnectionId='9' x:Name="JavaComboBox" Header="Java版本" PlaceholderText="选择Java" 
+                              DisplayMemberPath="Version" HorizontalAlignment="Stretch"
+                                                                              />
+                    <Button x:ConnectionId='10' Content="刷新" Grid.Column="1" VerticalAlignment="Bottom" Margin="8,0,0,0"                         />
+                </Grid>
+                <TextBlock x:ConnectionId='8' x:Name="JavaPathText" Opacity="0.6" FontSize="11" TextWrapping="Wrap" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <!-- 内存设置 -->
+            <StackPanel>
+                <TextBlock Text="内存设置" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:ConnectionId='6' x:Name="MinMemoryBox" Header="最小内存 (MB)" Margin="0,0,8,0"/>
+                    <TextBox x:ConnectionId='7' x:Name="MaxMemoryBox" Header="最大内存 (MB)" Grid.Column="1"/>
+                </Grid>
+            </StackPanel>
+
+            <!-- JVM参数 -->
+            <StackPanel>
+                <TextBlock Text="启动参数" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                <TextBox x:ConnectionId='4' x:Name="JvmArgsBox" Header="JVM参数" PlaceholderText="-XX:+UseG1GC"/>
+                <TextBox x:ConnectionId='5' x:Name="ServerPortBox" Header="服务器端口" Margin="0,8,0,0"/>
+            </StackPanel>
+
+            <!-- 服务器信息 -->
+            <StackPanel>
+                <TextBlock Text="服务器信息" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                <TextBox x:ConnectionId='3' x:Name="ServerIdBox" Header="服务器ID" IsReadOnly="True" Opacity="0.7"/>
+            </StackPanel>
+
+            <!-- 危险操作 -->
+            <StackPanel>
+                <TextBlock Text="危险操作" FontWeight="SemiBold" FontSize="16" Foreground="OrangeRed" Margin="0,0,0,10"/>
+                <Button x:ConnectionId='2' Content="删除服务器"                            Background="DarkRed"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</ContentDialog>
+

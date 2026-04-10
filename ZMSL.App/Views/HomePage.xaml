@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="ZMSL.App.Views.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ZMSL.App.Views"
+    xmlns:dto="using:ZMSL.Shared.DTOs"
+    Loaded="Page_Loaded"
+    Unloaded="Page_Unloaded">
+
+    <ScrollViewer Padding="40,32">
+        <StackPanel Spacing="24" MaxWidth="1400" HorizontalAlignment="Center">
+            <!-- 欢迎标题 -->
+            <TextBlock x:Name="WelcomeText" Text="{Binding WelcomeMessage, Mode=OneWay}"
+                       FontSize="28" FontWeight="Bold"/>
+
+            <!-- 第一部分卡片：统计服务器数量、运行数量、FRP流量、FRP状态 -->
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    CornerRadius="16" Padding="24">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 服务器总数 -->
+                    <StackPanel Grid.Column="0" HorizontalAlignment="Center" Spacing="12">
+                        <Border Background="{ThemeResource AccentFillColorDefaultBrush}"
+                                CornerRadius="50" Width="64" Height="64">
+                            <FontIcon Glyph="&#xE8F1;" FontSize="32" Foreground="White"/>
+                        </Border>
+                        <TextBlock x:Name="ServerCountText" Text="{Binding ServerCount, Mode=OneWay}" FontSize="36" FontWeight="Bold"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="服务器总数" FontSize="14" Opacity="0.7" HorizontalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- 运行中 -->
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Center" Spacing="12">
+                        <Border Background="LimeGreen" CornerRadius="50" Width="64" Height="64">
+                            <FontIcon Glyph="&#xE768;" FontSize="32" Foreground="White"/>
+                        </Border>
+                        <TextBlock x:Name="RunningCountText" Text="{Binding RunningServerCount, Mode=OneWay}" FontSize="36" FontWeight="Bold"
+                                   HorizontalAlignment="Center" Foreground="LimeGreen"/>
+                        <TextBlock Text="运行中" FontSize="14" Opacity="0.7" HorizontalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- FRP 流量 -->
+                    <StackPanel Grid.Column="2" HorizontalAlignment="Center" Spacing="12">
+                        <Border Background="DodgerBlue" CornerRadius="50" Width="64" Height="64">
+                            <FontIcon Glyph="&#xE8BE;" FontSize="32" Foreground="White"/>
+                        </Border>
+                        <TextBlock x:Name="FrpTrafficText" Text="{Binding FrpTrafficDisplay, Mode=OneWay}" FontSize="18" FontWeight="SemiBold"
+                                   HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" MaxWidth="140"/>
+                        <TextBlock Text="FRP 流量(已用/总共)" FontSize="14" Opacity="0.7" HorizontalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- FRP 状态 -->
+                    <StackPanel Grid.Column="3" HorizontalAlignment="Center" Spacing="12">
+                        <Border x:Name="FrpStatusBorder" Background="Gray" CornerRadius="50" Width="64" Height="64">
+                            <FontIcon Glyph="&#xE774;" FontSize="32" Foreground="White"/>
+                        </Border>
+                        <TextBlock x:Name="FrpStatusText" Text="{Binding FrpStatusText, Mode=OneWay}" FontSize="20" FontWeight="SemiBold"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="FRP 状态" FontSize="14" Opacity="0.7" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- 第二部分卡片：本机占用（内存、CPU）折线图 -->
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    CornerRadius="16" Padding="24">
+                <StackPanel Spacing="20">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Border Background="{ThemeResource AccentFillColorDefaultBrush}"
+                                CornerRadius="8" Width="36" Height="36">
+                            <FontIcon Glyph="&#xE76E;" FontSize="18" Foreground="White"/>
+                        </Border>
+                        <TextBlock Text="本机占用" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="120"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="120"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!-- CPU 图表区域 -->
+                        <TextBlock Grid.Row="0" Text="CPU 使用率" FontSize="14" Opacity="0.8" Margin="0,0,0,4"/>
+                        <Border Grid.Row="1" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                                CornerRadius="8" Padding="8,4">
+                            <Grid Margin="30,0,0,20">
+                                <!-- 动态网格线 Canvas -->
+                                <Canvas x:Name="CpuGridCanvas" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+                                
+                                <!-- Y轴标签 -->
+                                <StackPanel x:Name="CpuYAxisPanel" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="-35,0,0,0"/>
+                                
+                                <!-- X轴标签 -->
+                                <StackPanel x:Name="CpuXAxisPanel" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="0,0,0,-20"/>
+                                
+                                <Canvas x:Name="CpuChartCanvas" Height="112" SizeChanged="ChartCanvas_SizeChanged">
+                                    <Polyline x:Name="CpuPolyline" Stroke="{ThemeResource AccentFillColorDefaultBrush}"
+                                              StrokeThickness="2" StrokeLineJoin="Round"/>
+                                </Canvas>
+                            </Grid>
+                        </Border>
+                        
+                        <!-- 内存图表区域 -->
+                        <TextBlock Grid.Row="2" Text="内存 使用率" FontSize="14" Opacity="0.8" Margin="0,16,0,4"/>
+                        <Border Grid.Row="3" Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                                CornerRadius="8" Padding="8,4">
+                            <Grid Margin="30,0,0,20">
+                                <!-- 动态网格线 Canvas -->
+                                <Canvas x:Name="MemoryGridCanvas" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+
+                                <!-- Y轴标签 -->
+                                <StackPanel x:Name="MemoryYAxisPanel" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="-35,0,0,0"/>
+                                
+                                <!-- X轴标签 -->
+                                <StackPanel x:Name="MemoryXAxisPanel" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="0,0,0,-20"/>
+                                
+                                <Canvas x:Name="MemoryChartCanvas" Height="112" SizeChanged="ChartCanvas_SizeChanged">
+                                    <Polyline x:Name="MemoryPolyline" Stroke="DodgerBlue"
+                                              StrokeThickness="2" StrokeLineJoin="Round"/>
+                                </Canvas>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- 第三部分卡片：公告(70%) + 广告(30%) -->
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    CornerRadius="16" Padding="24">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 公告 70% -->
+                    <StackPanel Grid.Column="0" Spacing="16">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Border Background="{ThemeResource AccentFillColorDefaultBrush}"
+                                    CornerRadius="8" Width="36" Height="36">
+                                <FontIcon Glyph="&#xE789;" FontSize="18" Foreground="White"/>
+                            </Border>
+                            <TextBlock Text="系统公告" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <ItemsControl x:Name="AnnouncementList" MaxHeight="320">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                                            CornerRadius="8" Padding="16" Margin="0,0,0,12">
+                                        <StackPanel Spacing="8">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <Border Background="{ThemeResource AccentFillColorDefaultBrush}"
+                                                        CornerRadius="4" Padding="8,4">
+                                                    <TextBlock Text="{Binding Type}" FontSize="12" Foreground="White" FontWeight="SemiBold"/>
+                                                </Border>
+                                                <TextBlock Text="{Binding Title}" FontWeight="SemiBold" FontSize="15"/>
+                                            </StackPanel>
+                                            <TextBlock Text="{Binding Content}" TextWrapping="Wrap" Opacity="0.8" MaxLines="2"/>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock x:Name="NoAnnouncementText" Text="暂无公告" Opacity="0.5"
+                                   Visibility="Collapsed" HorizontalAlignment="Center" Margin="0,20,0,0"/>
+                    </StackPanel>
+
+                    <!-- 广告 30% -->
+                    <StackPanel Grid.Column="2" Spacing="16">
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Border Background="#FFD700" CornerRadius="8" Width="36" Height="36">
+                                <FontIcon Glyph="&#xE7BE;" FontSize="18" Foreground="Black"/>
+                            </Border>
+                            <TextBlock Text="广告推广" FontSize="20" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <ItemsControl x:Name="AdvertisementList" MaxHeight="320">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="dto:AdvertisementDto">
+                                    <Border CornerRadius="12" Margin="0,0,0,12"
+                                            Tapped="Advertisement_Tapped"
+                                            Tag="{x:Bind LinkUrl}"
+                                            PointerEntered="Advertisement_PointerEntered"
+                                            PointerExited="Advertisement_PointerExited"
+                                            Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}">
+                                        <Image Source="{x:Bind ImageUrl}"
+                                               Stretch="Uniform"
+                                               MaxHeight="160"
+                                               DataContext="{x:Bind}"
+                                               ImageFailed="Image_Failed"/>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock x:Name="NoAdvertisementText" Text="暂无广告" Opacity="0.5"
+                                   Visibility="Collapsed" HorizontalAlignment="Center" Margin="0,20,0,0"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+           
+            
+        </StackPanel>
+    </ScrollViewer>
+</Page>

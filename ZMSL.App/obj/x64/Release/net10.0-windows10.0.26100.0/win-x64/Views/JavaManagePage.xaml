@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="ZMSL.App.Views.JavaManagePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 顶部标题栏 -->
+        <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" Padding="40,20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" Spacing="20">
+                    <Button x:ConnectionId='9'                    Padding="12,8">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE72B;" FontSize="14"/>
+                            <TextBlock Text="返回"/>
+                        </StackPanel>
+                    </Button>
+                    <StackPanel>
+                        <TextBlock Text="Java 管理" FontSize="24" FontWeight="Bold"/>
+                        <TextBlock x:ConnectionId='10' x:Name="NodeNameText" Text="" Opacity="0.7" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10">
+                    <Button x:ConnectionId='7'                           Style="{StaticResource AccentButtonStyle}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE710;" FontSize="14"/>
+                            <TextBlock Text="安装新 Java"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:ConnectionId='8'                       Padding="16,8">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE72C;" FontSize="14"/>
+                            <TextBlock Text="刷新"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 主内容区 -->
+        <Grid Grid.Row="1" Padding="40,24">
+            <!-- Java 列表 -->
+            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                    CornerRadius="12" Padding="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- 列表头部 -->
+                    <Border BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                            BorderThickness="0,0,0,1" Padding="20,16">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="200"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="安装路径" FontWeight="SemiBold" Opacity="0.7"/>
+                            <TextBlock Grid.Column="1" Text="版本" FontWeight="SemiBold" Opacity="0.7"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Java 列表内容 -->
+                    <ListView x:ConnectionId='4' x:Name="JavaListView" Grid.Row="1" 
+                              SelectionMode="None">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="20,12" Height="70">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="200"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- 路径 -->
+                                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Path}" 
+                                                   FontSize="14" FontWeight="SemiBold"/>
+                                        <TextBlock Text="Java 安装目录" 
+                                                   FontSize="12" Opacity="0.6" Margin="0,4,0,0"/>
+                                    </StackPanel>
+
+                                    <!-- 版本 -->
+                                    <TextBlock Grid.Column="1" Text="{Binding Version}" 
+                                               FontSize="14" Opacity="0.8"
+                                               VerticalAlignment="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <!-- 空状态提示 -->
+                    <StackPanel x:ConnectionId='5' x:Name="EmptyHint" Grid.Row="1" 
+                                VerticalAlignment="Center" HorizontalAlignment="Center"
+                                Visibility="Collapsed">
+                        <FontIcon Glyph="&#xE74C;" FontSize="64" Opacity="0.2"/>
+                        <TextBlock Text="未找到任何 Java 安装" FontSize="16" Opacity="0.5" 
+                                   Margin="0,16,0,0" HorizontalAlignment="Center"/>
+                        <TextBlock Text="点击上方按钮开始安装" 
+                                   FontSize="13" Opacity="0.4"
+                                   Margin="0,8,0,0" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- 加载指示器 -->
+            <Grid x:ConnectionId='2' x:Name="LoadingOverlay" Background="{ThemeResource LayerFillColorDefaultBrush}" 
+                  Visibility="Collapsed">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="16">
+                    <ProgressRing IsActive="True" Width="48" Height="48"/>
+                    <TextBlock x:ConnectionId='3' x:Name="StatusText" Text="正在加载..." FontSize="14" Opacity="0.7"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>
+

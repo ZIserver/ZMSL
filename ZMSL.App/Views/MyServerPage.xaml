@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="ZMSL.App.Views.MyServerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:ZMSL.App.Converters"
+    Loaded="Page_Loaded">
+
+    <Page.Resources>
+        <converters:CoreTypeToPluginVisibilityConverter x:Key="CoreTypeToPluginVisibility"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisible"/>
+        <converters:BoolToVisibilityConverter x:Key="BoolToCollapsed" Invert="True"/>
+        <converters:BoolToBorderThicknessConverter x:Key="BoolToBorderThickness"/>
+        <converters:BoolToSelectionBorderBrushConverter x:Key="BoolToSelectionBorderBrush"/>
+    </Page.Resources>
+
+    <Grid Padding="40,32">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 标题栏 -->
+        <Grid Margin="0,0,0,24">
+            <StackPanel Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+                <TextBlock Text="我的服务器" FontSize="32" FontWeight="Bold"/>
+                
+                <!-- 视图切换 -->
+                <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Bottom" Margin="0,0,0,6">
+                    <Button Padding="8" Background="Transparent" BorderThickness="0" 
+                            Command="{Binding ToggleViewModeCommand}"
+                            Visibility="{Binding IsCardView, Converter={StaticResource BoolToVisible}}"
+                            ToolTipService.ToolTip="切换到列表视图">
+                        <FontIcon Glyph="&#xE8FD;" FontSize="16"/>
+                    </Button>
+                    <Button Padding="8" Background="Transparent" BorderThickness="0" 
+                            Command="{Binding ToggleViewModeCommand}"
+                            Visibility="{Binding IsCardView, Converter={StaticResource BoolToCollapsed}}"
+                            ToolTipService.ToolTip="切换到卡片视图">
+                        <FontIcon Glyph="&#xE80A;" FontSize="16"/>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+            
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Spacing="8">
+                <!-- 批量操作按钮 -->
+                <Button Click="BatchButton_Click" Padding="12,8" ToolTipService.ToolTip="批量操作">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon Glyph="&#xE762;" FontSize="16"/>
+                        <TextBlock Text="批量"/>
+                    </StackPanel>
+                </Button>
+                <Button Content="导入服务器" Click="ImportServer_Click" Padding="16,8"/>
+                <Button Content="新建服务器" Style="{StaticResource AccentButtonStyle}" Click="NewServer_Click" Padding="16,8"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- 服务器列表 -->
+        <Grid Grid.Row="1">
+            <!-- 卡片视图 -->
+            <GridView x:Name="ServerGridView"
+                      ItemsSource="{Binding Servers}"
+                      Visibility="{Binding IsCardView, Converter={StaticResource BoolToVisible}}"
+                      SelectionMode="None"
+                      IsItemClickEnabled="True"
+                      ItemClick="ServerItem_Click">
+                <GridView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                                CornerRadius="12" Width="300"
+                                BorderBrush="{Binding IsSelected, Converter={StaticResource BoolToSelectionBorderBrush}}"
+                                BorderThickness="{Binding IsSelected, Converter={StaticResource BoolToBorderThickness}}"
+                                Margin="6">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- 区域一：信息区 -->
+                                <StackPanel Grid.Row="0" Padding="20">
+                                    <!-- 头部：图标与名称 -->
+                                    <Grid Margin="0,0,0,16">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <Border Background="{ThemeResource AccentFillColorDefaultBrush}" 
+                                                CornerRadius="8" Width="48" Height="48" Margin="0,0,16,0">
+                                            <Grid>
+                                                <FontIcon x:Name="CardDefaultIcon" Glyph="&#xE8F1;" FontSize="24" Foreground="White" 
+                                                          HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                <Image Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                       Tag="{Binding LocalServer.IconPath}"
+                                                       Loaded="ServerIcon_Loaded"/>
+                                            </Grid>
+                                        </Border>
+                                        
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Name}" FontSize="18" FontWeight="Bold" TextTrimming="CharacterEllipsis"/>
+                                            <Border Background="{ThemeResource SystemAccentColorLight2}" CornerRadius="4" Padding="6,2" HorizontalAlignment="Left" Margin="0,4,0,0">
+                                                <TextBlock Text="{Binding Location}" FontSize="11" Foreground="White"/>
+                                            </Border>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <!-- 属性列表 (一行一个) -->
+                                    <StackPanel Spacing="8">
+                                        <!-- 核心 -->
+                                        <StackPanel Orientation="Horizontal" Spacing="8" Opacity="0.8">
+                                            <FontIcon Glyph="&#xE7F8;" FontSize="14" Width="20"/>
+                                            <TextBlock Text="{Binding CoreType}" FontSize="14"/>
+                                        </StackPanel>
+                                        
+                                        <!-- 版本 -->
+                                        <StackPanel Orientation="Horizontal" Spacing="8" Opacity="0.8">
+                                            <FontIcon Glyph="&#xE946;" FontSize="14" Width="20"/>
+                                            <TextBlock Text="{Binding MinecraftVersion}" FontSize="14"/>
+                                        </StackPanel>
+                                        
+                                        <!-- 内存 -->
+                                        <StackPanel Orientation="Horizontal" Spacing="8" Opacity="0.8">
+                                            <FontIcon Glyph="&#xE964;" FontSize="14" Width="20"/>
+                                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                                <TextBlock Text="{Binding MinMemoryMB}" FontSize="14"/>
+                                                <TextBlock Text="MB -" FontSize="14"/>
+                                                <TextBlock Text="{Binding MaxMemoryMB}" FontSize="14"/>
+                                                <TextBlock Text="MB" FontSize="14"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <!-- 区域二：功能区 -->
+                                <Border Grid.Row="1" BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}" BorderThickness="0,1,0,0" 
+                                        Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}" CornerRadius="0,0,12,12">
+                                    <Grid Padding="12,12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/> <!-- Spacer -->
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/> <!-- Spacer -->
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <Button Grid.Column="0" Content="管理" HorizontalAlignment="Stretch" 
+                                                Style="{StaticResource AccentButtonStyle}"
+                                                Tag="{Binding}" Click="ManageServer_Click"/>
+                                                
+                                        <Grid Grid.Column="1" Width="8"/>
+
+                                        <Grid Grid.Column="2">
+                                            <Button Content="启动" HorizontalAlignment="Stretch"
+                                                    Visibility="{Binding IsRunning, Converter={StaticResource BoolToCollapsed}}"
+                                                    Tag="{Binding}" Click="StartServer_Click"/>
+                                            <Button Content="停止" HorizontalAlignment="Stretch"
+                                                    Visibility="{Binding IsRunning, Converter={StaticResource BoolToVisible}}"
+                                                    Tag="{Binding}" Click="StopServer_Click"
+                                                    Background="#C42B1C" Foreground="White"/>
+                                        </Grid>
+                                                
+                                        <Grid Grid.Column="3" Width="8"/>
+                                                
+                                        <Button Grid.Column="4" Content="插件" HorizontalAlignment="Stretch"
+                                                Tag="{Binding}" Click="PluginButton_Click"
+                                                Visibility="{Binding CoreType, Converter={StaticResource CoreTypeToPluginVisibility}}"/>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </GridView.ItemTemplate>
+            </GridView>
+
+            <!-- 列表视图 -->
+            <ListView x:Name="ServerListView"
+                      ItemsSource="{Binding Servers}"
+                      Visibility="{Binding IsCardView, Converter={StaticResource BoolToCollapsed}}"
+                      SelectionMode="None"
+                      IsItemClickEnabled="True"
+                      ItemClick="ServerItem_Click">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="12,24" Margin="0,4" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="8"
+                              BorderBrush="{Binding IsSelected, Converter={StaticResource BoolToSelectionBorderBrush}}"
+                              BorderThickness="{Binding IsSelected, Converter={StaticResource BoolToBorderThickness}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/> <!-- Icon -->
+                                <ColumnDefinition Width="200"/>  <!-- Name -->
+                                <ColumnDefinition Width="100"/>  <!-- Location -->
+                                <ColumnDefinition Width="120"/>  <!-- Core -->
+                                <ColumnDefinition Width="100"/>  <!-- Version -->
+                                <ColumnDefinition Width="150"/>  <!-- Memory -->
+                                <ColumnDefinition Width="*"/>    <!-- Spacer -->
+                                <ColumnDefinition Width="Auto"/> <!-- Actions -->
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" Background="{ThemeResource AccentFillColorDefaultBrush}" 
+                                    CornerRadius="6" Width="40" Height="40" Margin="0,0,16,0">
+                                <Grid>
+                                    <FontIcon Glyph="&#xE8F1;" FontSize="20" Foreground="White" 
+                                              HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <Image Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           Tag="{Binding LocalServer.IconPath}"
+                                           Loaded="ServerIcon_Loaded"/>
+                                </Grid>
+                            </Border>
+                            
+                            <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="15" TextTrimming="CharacterEllipsis"/>
+                            
+                            <Border Grid.Column="2" Background="{ThemeResource SystemAccentColorLight2}" CornerRadius="4" Padding="8,2" 
+                                    HorizontalAlignment="Left" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding Location}" FontSize="12" Foreground="White"/>
+                            </Border>
+                            
+                            <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Opacity="0.8">
+                                <FontIcon Glyph="&#xE7F8;" FontSize="14"/>
+                                <TextBlock Text="{Binding CoreType}" FontSize="14"/>
+                            </StackPanel>
+                            
+                            <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Opacity="0.8">
+                                <FontIcon Glyph="&#xE946;" FontSize="14"/>
+                                <TextBlock Text="{Binding MinecraftVersion}" FontSize="14"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="5" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center" Opacity="0.8">
+                                <FontIcon Glyph="&#xE964;" FontSize="14"/>
+                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                    <TextBlock Text="{Binding MinMemoryMB}" FontSize="14"/>
+                                    <TextBlock Text="-" FontSize="14"/>
+                                    <TextBlock Text="{Binding MaxMemoryMB}" FontSize="14"/>
+                                    <TextBlock Text="MB" FontSize="14"/>
+                                </StackPanel>
+                            </StackPanel>
+                            
+                            <!-- 单个操作按钮 (非选择模式下显示) -->
+                            <StackPanel Grid.Column="7" Orientation="Horizontal" Spacing="16" VerticalAlignment="Center"
+                                        Visibility="{Binding ElementName=ServerListView, Path=DataContext.IsSelectionMode, Converter={StaticResource BoolToCollapsed}}">
+                                <Button Content="插件" Padding="12,6" 
+                                        Tag="{Binding}" Click="PluginButton_Click"
+                                        Visibility="{Binding CoreType, Converter={StaticResource CoreTypeToPluginVisibility}}"/>
+                                <Grid>
+                                    <Button Content="启动" Style="{StaticResource AccentButtonStyle}" Padding="16,6" HorizontalAlignment="Stretch"
+                                            Visibility="{Binding IsRunning, Converter={StaticResource BoolToCollapsed}}"
+                                            Tag="{Binding}" Click="StartServer_Click"/>
+                                    <Button Content="停止" Padding="16,6" HorizontalAlignment="Stretch"
+                                            Visibility="{Binding IsRunning, Converter={StaticResource BoolToVisible}}"
+                                            Tag="{Binding}" Click="StopServer_Click"
+                                            Background="#C42B1C" Foreground="White"/>
+                                </Grid>
+                                <Button Content="管理" Style="{StaticResource AccentButtonStyle}" Padding="16,6"
+                                        Tag="{Binding}" Click="ManageServer_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            
+            <!-- 批量操作栏 -->
+            <Border VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,32"
+                    Background="{ThemeResource SolidBackgroundFillColorBaseBrush}" 
+                    BorderBrush="{ThemeResource SurfaceStrokeColorDefaultBrush}" BorderThickness="1"
+                    CornerRadius="8" Padding="16,12"
+                    Visibility="{Binding IsSelectionMode, Converter={StaticResource BoolToVisible}}">
+                <Border.Shadow>
+                    <ThemeShadow/>
+                </Border.Shadow>
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                    <Button Command="{Binding SelectAllCommand}" Content="全选"/>
+                    <Button Command="{Binding DeselectAllCommand}" Content="取消全选"/>
+                    <AppBarSeparator/>
+                    <Button Command="{Binding BatchStartCommand}" Style="{StaticResource AccentButtonStyle}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE768;" FontSize="16"/>
+                            <TextBlock Text="启动"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding BatchStopCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE71A;" FontSize="16"/>
+                            <TextBlock Text="停止"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding BatchDeleteCommand}" Background="#C42B1C" Foreground="White">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE74D;" FontSize="16"/>
+                            <TextBlock Text="删除"/>
+                        </StackPanel>
+                    </Button>
+                    <AppBarSeparator/>
+                    <Button Command="{Binding ToggleSelectionModeCommand}" Content="退出"/>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- 空列表提示 -->
+        <StackPanel x:Name="EmptyPanel" Grid.Row="1" 
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Visibility="Collapsed">
+            <FontIcon Glyph="&#xE8F1;" FontSize="80" Opacity="0.2"/>
+            <TextBlock Text="暂无服务器" FontSize="20" Opacity="0.5" Margin="0,20,0,8" HorizontalAlignment="Center"/>
+            <TextBlock Text="点击右上角按钮创建第一个服务器" FontSize="14" Opacity="0.4" HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+</Page>

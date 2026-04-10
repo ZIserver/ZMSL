@@ -1,0 +1,70 @@
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
+using ZMSL.App.ViewModels;
+
+namespace ZMSL.App.Views;
+
+public sealed partial class CreatePostPage : Page
+{
+    public CreatePostViewModel ViewModel { get; }
+
+    public CreatePostPage()
+    {
+        this.InitializeComponent();
+        ViewModel = App.Services.GetRequiredService<CreatePostViewModel>();
+        this.DataContext = ViewModel;
+    }
+
+    private void Page_Loaded(object sender, RoutedEventArgs e)
+    {
+        // 页面加载完成后的初始化
+    }
+
+    private void SubmitButton_Click(object sender, RoutedEventArgs e)
+    {
+        ViewModel.SubmitPostCommand.Execute(null);
+    }
+
+    private void CancelButton_Click(object sender, RoutedEventArgs e)
+    {
+        ViewModel.CancelCommand.Execute(null);
+    }
+
+    // Helper methods for XAML binding
+    private string GetTitleValidationText(string title)
+    {
+        if (string.IsNullOrEmpty(title))
+            return "请输入标题";
+        
+        if (title.Length < 5)
+            return $"还需要{5 - title.Length}个字符";
+        
+        return $"✓ 标题长度合适 ({title.Length}/100)";
+    }
+
+    private string GetContentValidationText(string content)
+    {
+        if (string.IsNullOrEmpty(content))
+            return "请输入内容";
+        
+        if (content.Length < 10)
+            return $"还需要{10 - content.Length}个字符";
+        
+        return $"✓ 内容长度合适 ({content.Length}字符)";
+    }
+
+    private Brush GetValidationColor(bool isValid)
+    {
+        if (isValid)
+        {
+            return Application.Current.Resources["SystemFillColorSuccessBrush"] as Brush 
+                ?? new SolidColorBrush(Microsoft.UI.Colors.Green);
+        }
+        else
+        {
+            return Application.Current.Resources["SystemFillColorCriticalBrush"] as Brush
+                ?? new SolidColorBrush(Microsoft.UI.Colors.Red);
+        }
+    }
+}

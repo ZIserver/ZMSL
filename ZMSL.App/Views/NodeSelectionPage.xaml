@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="ZMSL.App.Views.NodeSelectionPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="24,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 标题栏 -->
+        <Grid Margin="0,0,0,24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Border Background="{ThemeResource AccentFillColorDefaultBrush}" 
+                        CornerRadius="8" Width="40" Height="40" VerticalAlignment="Center">
+                    <FontIcon Glyph="&#xE968;" Foreground="White" FontSize="20"/>
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="节点新建" FontSize="20" FontWeight="Bold"/>
+                    <TextBlock Text="选择要部署的节点" FontSize="12" Opacity="0.6"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <!-- 节点列表 -->
+        <ScrollViewer Grid.Row="1">
+            <StackPanel Spacing="12">
+                <ListView x:Name="NodesListView" 
+                          SelectionMode="Single"
+                          SelectionChanged="NodesListView_SelectionChanged">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                                    CornerRadius="8" Padding="16" Margin="0,4">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Background="{ThemeResource AccentFillColorDefaultBrush}" 
+                                            CornerRadius="8" Width="48" Height="48" Margin="0,0,16,0">
+                                        <FontIcon Glyph="&#xE968;" Foreground="White" FontSize="24"/>
+                                    </Border>
+
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="SemiBold"/>
+                                            <Border Background="{ThemeResource SystemAccentColorLight2}" CornerRadius="4" Padding="6,2">
+                                                <TextBlock Text="{Binding PlatformDisplayName}" FontSize="11" Foreground="White"/>
+                                            </Border>
+                                        </StackPanel>
+                                        <TextBlock Text="{Binding Host}" FontSize="13" Opacity="0.7" Margin="0,4,0,0"/>
+                                    </StackPanel>
+
+                                    <FontIcon Grid.Column="2" Glyph="&#xE72A;" FontSize="16" Opacity="0.4" VerticalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <!-- 空状态提示 -->
+                <StackPanel x:Name="EmptyPanel" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12" Visibility="Collapsed">
+                    <FontIcon Glyph="&#xE968;" FontSize="48" Opacity="0.2"/>
+                    <TextBlock Text="暂无可用节点" FontSize="16" Opacity="0.5"/>
+                    <Button Content="前往添加节点" Click="GoToAddNode_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- 底部按钮栏 -->
+        <Grid Grid.Row="2" Margin="0,24,0,0" 
+              Background="{ThemeResource LayerFillColorDefaultBrush}"
+              BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+              BorderThickness="0,1,0,0" Padding="16">
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <Button Click="Back_Click" Padding="16,10">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <FontIcon Glyph="&#xE72B;" FontSize="14"/>
+                        <TextBlock Text="返回" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12">
+                    <Button x:Name="NextButton" Click="Next_Click" 
+                            Style="{StaticResource AccentButtonStyle}" 
+                            IsEnabled="False" Padding="20,10">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="下一步" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                            <FontIcon Glyph="&#xE72A;" FontSize="16"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <!-- 加载指示器 -->
+        <Grid Grid.RowSpan="3" Background="{ThemeResource LayerFillColorDefaultBrush}" 
+              x:Name="LoadingOverlay" Visibility="Collapsed">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="16">
+                <ProgressRing IsActive="True" Width="48" Height="48"/>
+                <TextBlock Text="正在加载节点..." FontSize="14" FontWeight="SemiBold"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

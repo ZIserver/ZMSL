@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="ZMSL.App.Views.CreateRemoteServerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="Transparent">
+
+    <Grid Padding="24,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 标题栏 -->
+        <Grid Margin="0,0,0,24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Border Background="{ThemeResource AccentFillColorDefaultBrush}" 
+                        CornerRadius="8" Width="40" Height="40" VerticalAlignment="Center">
+                    <FontIcon Glyph="&#xE710;" Foreground="White" FontSize="20"/>
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="创建远程服务器" FontSize="20" FontWeight="Bold"/>
+                    <TextBlock x:Name="NodeInfoText" Text="在节点上创建服务器" FontSize="12" Opacity="0.6"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <!-- 配置内容 -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <Grid HorizontalAlignment="Stretch" Margin="40,0">
+                <StackPanel Spacing="20">
+                    
+                    <!-- 服务器名称 -->
+                    <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                            CornerRadius="8" Padding="20" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                            BorderThickness="1">
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="服务器名称" FontSize="16" FontWeight="SemiBold"/>
+                            <TextBox x:Name="ServerNameBox" PlaceholderText="请输入服务器名称" 
+                                     FontSize="14" TextChanged="FormField_Changed"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- 核心配置 -->
+                    <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                            CornerRadius="8" Padding="20" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                            BorderThickness="1">
+                        <StackPanel Spacing="16">
+                            <TextBlock Text="服务端核心配置" FontSize="16" FontWeight="SemiBold"/>
+                            
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="16"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <StackPanel Spacing="8">
+                                    <TextBlock Text="核心类型" FontSize="13" Opacity="0.7"/>
+                                    <ComboBox x:Name="CoreTypeBox" PlaceholderText="选择服务端类型" 
+                                              SelectionChanged="CoreType_SelectionChanged" 
+                                              HorizontalAlignment="Stretch"/>
+                                </StackPanel>
+                                
+                                <StackPanel Grid.Column="2" Spacing="8">
+                                    <TextBlock Text="Minecraft 版本" FontSize="13" Opacity="0.7"/>
+                                    <ComboBox x:Name="VersionBox" PlaceholderText="选择MC版本" 
+                                              IsEnabled="False" SelectionChanged="FormField_Changed" 
+                                              HorizontalAlignment="Stretch"/>
+                                </StackPanel>
+                            </Grid>
+                            
+                            <CheckBox x:Name="AutoDownloadCheckBox" Content="自动下载服务端核心（推荐）" 
+                                      IsChecked="True" Checked="AutoDownload_Changed" Unchecked="AutoDownload_Changed"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Java 和内存配置 -->
+                    <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                            CornerRadius="8" Padding="20" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                            BorderThickness="1">
+                        <StackPanel Spacing="16">
+                            <TextBlock Text="运行环境配置" FontSize="16" FontWeight="SemiBold"/>
+                            
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="Java 版本" FontSize="13" Opacity="0.7"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ComboBox x:Name="JavaComboBox" PlaceholderText="选择 Java 版本" 
+                                              HorizontalAlignment="Stretch" SelectionChanged="JavaComboBox_SelectionChanged"/>
+                                    <Button Grid.Column="1" Content="刷新" Margin="8,0,0,0" Click="RefreshJava_Click"/>
+                                </Grid>
+                                <TextBlock x:Name="JavaPathText" Text="" FontSize="12" Opacity="0.5" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            
+                            <!-- 隐藏的 JavaPathBox，用于存储实际路径 -->
+                            <TextBox x:Name="JavaPathBox" Visibility="Collapsed" Text="java" TextChanged="FormField_Changed"/>
+                            
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="16"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <StackPanel Spacing="8">
+                                    <TextBlock Text="最小内存 (MB)" FontSize="13" Opacity="0.7"/>
+                                    <NumberBox x:Name="MinMemoryBox" Value="1024" Minimum="512" 
+                                               SpinButtonPlacementMode="Compact" ValueChanged="FormField_Changed"/>
+                                </StackPanel>
+                                
+                                <StackPanel Grid.Column="2" Spacing="8">
+                                    <TextBlock Text="最大内存 (MB)" FontSize="13" Opacity="0.7"/>
+                                    <NumberBox x:Name="MaxMemoryBox" Value="2048" Minimum="512" 
+                                               SpinButtonPlacementMode="Compact" ValueChanged="FormField_Changed"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- 网络配置 -->
+                    <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                            CornerRadius="8" Padding="20" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                            BorderThickness="1">
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="网络配置" FontSize="16" FontWeight="SemiBold"/>
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="服务器端口" FontSize="13" Opacity="0.7"/>
+                                <NumberBox x:Name="PortBox" Value="25565" Minimum="1" Maximum="65535" 
+                                           SpinButtonPlacementMode="Compact" ValueChanged="FormField_Changed"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- 高级配置（可选） -->
+                    <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" 
+                            CornerRadius="8" Padding="20" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+                            BorderThickness="1">
+                        <StackPanel Spacing="12">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE9E9;" FontSize="16" Foreground="{ThemeResource AccentFillColorDefaultBrush}"/>
+                                <TextBlock Text="高级配置（可选）" FontSize="16" FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="JVM 参数" FontSize="13" Opacity="0.7"/>
+                                <TextBox x:Name="JvmArgsBox" PlaceholderText="例如：-XX:+UseG1GC" 
+                                         AcceptsReturn="False" FontSize="14"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+
+        <!-- 底部按钮栏 -->
+        <Grid Grid.Row="2" Margin="0,24,0,0" 
+              Background="{ThemeResource LayerFillColorDefaultBrush}"
+              BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" 
+              BorderThickness="0,1,0,0" Padding="16">
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <Button Click="Back_Click" Padding="16,10">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <FontIcon Glyph="&#xE72B;" FontSize="14"/>
+                        <TextBlock Text="返回" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12">
+                    <Button x:Name="CreateButton" Click="Create_Click" 
+                            Style="{StaticResource AccentButtonStyle}" 
+                            IsEnabled="False" Padding="20,10">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE710;" FontSize="16"/>
+                            <TextBlock Text="创建服务器" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <!-- 加载指示器 -->
+        <Grid Grid.RowSpan="3" Background="{ThemeResource LayerFillColorDefaultBrush}" 
+              x:Name="LoadingOverlay" Visibility="Collapsed">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="16">
+                <ProgressRing IsActive="True" Width="48" Height="48"/>
+                <TextBlock x:Name="LoadingText" Text="正在创建服务器..." FontSize="14" FontWeight="SemiBold"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

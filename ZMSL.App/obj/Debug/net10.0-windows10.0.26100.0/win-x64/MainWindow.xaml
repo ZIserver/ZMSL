@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="ZMSL.App.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ZMSL.App"
+    xmlns:views="using:ZMSL.App.Views">
+
+    <Grid>
+        <Grid.Resources>
+            <SolidColorBrush x:Key="WindowBackground" Color="{ThemeResource ApplicationPageBackgroundThemeColor}" />
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 自定义标题栏 -->
+        <Grid x:ConnectionId='2' x:Name="AppTitleBar" Grid.Row="0" Height="40" 
+              Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/> <!-- 用户区域 -->
+                <ColumnDefinition Width="150"/> <!-- 窗口按钮占位 -->
+            </Grid.ColumnDefinitions>
+            
+            <!-- 左侧图标和标题 -->
+            <StackPanel Orientation="Horizontal" Grid.Column="0" Margin="12,0,0,0" VerticalAlignment="Center">
+                <Image Source="Assets/app-icon.ico" Width="16" Height="16" Margin="0,0,8,0"/>
+                <TextBlock Text="智穗MC开服器" FontSize="12" FontWeight="Normal" VerticalAlignment="Center"/>
+            </StackPanel>
+            
+            <!-- 中间拖动区域 -->
+            <Border x:ConnectionId='16' x:Name="DragRegion" Grid.Column="1" Background="Transparent"/>
+
+            <!-- 右侧用户区域 -->
+            <StackPanel x:ConnectionId='17' x:Name="TitleBarUserArea" Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" Margin="0,0,8,0" Visibility="Collapsed">
+                <!-- 移至 ForumPage -->
+            </StackPanel>
+        </Grid>
+
+        <!-- 主内容区 -->
+        <NavigationView x:ConnectionId='3'
+            x:Name="NavView"
+            Grid.Row="1"
+            IsBackButtonVisible="Collapsed"
+            IsSettingsVisible="False"
+                                                       
+            PaneDisplayMode="Left"
+            IsPaneToggleButtonVisible="True"
+            IsPaneOpen="False"
+            OpenPaneLength="200"
+            CompactPaneLength="48"
+            Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+            
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="首页" Tag="Home" Icon="Home"/>
+                <NavigationViewItem Content="我的服务器" Tag="MyServer" Icon="AllApps"/>
+                <NavigationViewItem Content="群组服务器" Tag="GroupServer">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE7F4;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="服务端下载" Tag="ServerCore">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE896;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="日志分析" Tag="LogAnalysis">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE9D9;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="节点管理" Tag="LinuxNode">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE968;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="Java环境" Tag="LocalJava">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xEA86;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="抽奖活动" Tag="Lottery">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE76E;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="FRP 主菜单" Tag="FrpMenu" Icon="Globe">
+                    <NavigationViewItem.MenuItems>
+                        <NavigationViewItem Content="ZMSLFrp" Tag="Frp" Icon="Globe"/>
+                        <NavigationViewItem Content="MeFrp" Tag="MeFrp">
+                            <NavigationViewItem.Icon>
+                                <FontIcon Glyph="&#xE9CA;"/>
+                            </NavigationViewItem.Icon>
+                        </NavigationViewItem>
+                        <NavigationViewItem Content="MSLFrp" Tag="MSLFrp">
+                            <NavigationViewItem.Icon>
+                                <FontIcon Glyph="&#xEA18;"/>
+                            </NavigationViewItem.Icon>
+                        </NavigationViewItem>
+                        <NavigationViewItem Content="SakuraFrp" Tag="SakuraFrp">
+                            <NavigationViewItem.Icon>
+                                <FontIcon Glyph="&#xE7C3;"/>
+                            </NavigationViewItem.Icon>
+                        </NavigationViewItem>
+                        <NavigationViewItem Content="StarryFrp" Tag="StarryFrp">
+                            <NavigationViewItem.Icon>
+                                <FontIcon Glyph="&#xE706;"/>
+                            </NavigationViewItem.Icon>
+                        </NavigationViewItem>
+                    </NavigationViewItem.MenuItems>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+            
+            <!-- 底部菜单项 -->
+            <NavigationView.FooterMenuItems>
+                <NavigationViewItem Content="设置" Tag="Settings" Icon="Setting"/>
+                
+                <!-- 主题切换按钮 -->
+                <NavigationViewItem x:ConnectionId='10' x:Name="ThemeToggleNavItem" Content="主题"                                   >
+                    <NavigationViewItem.Icon>
+                        <FontIcon x:ConnectionId='14' x:Name="ThemeIcon" Glyph="&#xE793;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                
+                <!-- 用户信息按钮 -->
+                <NavigationViewItem x:ConnectionId='11' x:Name="UserNavItem"                            >
+                    <NavigationViewItem.Content>
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <PersonPicture x:ConnectionId='12' x:Name="UserAvatar" Width="20" Height="20"/>
+                            <TextBlock x:ConnectionId='13' x:Name="UsernameText" Text="未登录" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </NavigationViewItem.Content>
+                </NavigationViewItem>
+            </NavigationView.FooterMenuItems>
+
+            <Frame x:ConnectionId='15' x:Name="ContentFrame"/>
+        </NavigationView>
+        
+        <!-- 全局 FRPC 下载对话框覆盖层 -->
+        <Border x:ConnectionId='4' x:Name="GlobalDownloadDialogOverlay" Background="#80000000" Visibility="Collapsed" Grid.RowSpan="2">
+            <Grid>
+                <Border Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="12" 
+                        Padding="32" MaxWidth="500" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <StackPanel Spacing="20">
+                        <TextBlock Text="内网穿透组件未安装" FontWeight="Bold" FontSize="20" 
+                                   HorizontalAlignment="Center"/>
+                        
+                        <TextBlock Text="检测到您尚未安装 FRP 内网穿透程序（frpc.exe）。&#10;&#10;请点击下方按钮在线下载安装，以便使用 FRP 内网穿透功能。" 
+                                   TextWrapping="Wrap" Opacity="0.8" Margin="0,8"/>
+                        
+                        <StackPanel x:ConnectionId='5' x:Name="DownloadProgressPanel" Visibility="Collapsed" Spacing="12">
+                            <ProgressBar x:ConnectionId='8' x:Name="DownloadProgressBar" Value="0" Maximum="100" Height="12" 
+                                         CornerRadius="6"/>
+                            <TextBlock x:ConnectionId='9' x:Name="DownloadStatusText" Text="正在下载..." HorizontalAlignment="Center" 
+                                       Opacity="0.7"/>
+                        </StackPanel>
+                        
+                        <Button x:ConnectionId='6' x:Name="DownloadButton" Content="立即下载安装" 
+                                Style="{StaticResource AccentButtonStyle}" 
+                                HorizontalAlignment="Stretch" Height="44" FontSize="16"
+                                                            />
+                        
+                        <Button x:ConnectionId='7' x:Name="CancelButton" Content="取消" 
+                                HorizontalAlignment="Stretch" Height="40"
+                                                          />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
+

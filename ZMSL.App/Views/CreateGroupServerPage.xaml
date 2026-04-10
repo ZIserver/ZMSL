@@ -1,0 +1,169 @@
+<Page
+    x:Class="ZMSL.App.Views.CreateGroupServerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ZMSL.App.Views"
+    xmlns:vm="using:ZMSL.App.ViewModels"
+    xmlns:models="using:ZMSL.App.Models"
+    xmlns:services="using:ZMSL.App.Services"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Padding="32,24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Header -->
+            <RowDefinition Height="*"/>    <!-- Content -->
+            <RowDefinition Height="Auto"/> <!-- Footer -->
+        </Grid.RowDefinitions>
+
+        <!-- 1. Header with Icon -->
+        <Grid Margin="0,0,0,32">
+            <StackPanel Orientation="Horizontal" Spacing="16">
+                <Border Width="48" Height="48" CornerRadius="12" Background="{ThemeResource SystemControlHighlightAccentBrush}">
+                    <FontIcon Glyph="&#xE71B;" FontSize="24" Foreground="White"/>
+                </Border>
+                <StackPanel VerticalAlignment="Center" Spacing="2">
+                    <TextBlock Text="创建群组服务器" FontSize="24" FontWeight="Bold"/>
+                    <TextBlock Text="配置 Velocity 代理网络，连接多个子服务器" FontSize="14" Opacity="0.6"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <!-- 2. Content (2x2 Grid) -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="0,0,16,0">
+            <Grid ColumnSpacing="24" RowSpacing="24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <!-- Row 0, Col 0: Basic Info -->
+                <Border Grid.Row="0" Grid.Column="0" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="8" Padding="24">
+                    <StackPanel Spacing="20">
+                        <TextBlock Text="基础信息" FontSize="16" FontWeight="SemiBold"/>
+                        
+                        <TextBox Header="服务器名称" Text="{x:Bind ViewModel.ServerName, Mode=TwoWay}" />
+                        
+                        <NumberBox Header="代理端口" Value="{x:Bind ViewModel.GroupPort, Mode=TwoWay}" 
+                                   Minimum="1024" Maximum="65535" SpinButtonPlacementMode="Inline" />
+                        
+                        <Grid ColumnSpacing="16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <NumberBox Header="最小内存 (MB)" Value="{x:Bind ViewModel.MinMemory, Mode=TwoWay}" 
+                                       Minimum="128" Maximum="32768" SpinButtonPlacementMode="Inline"/>
+                                       
+                            <NumberBox Grid.Column="1" Header="最大内存 (MB)" Value="{x:Bind ViewModel.MaxMemory, Mode=TwoWay}" 
+                                       Minimum="512" Maximum="32768" SpinButtonPlacementMode="Inline"/>
+                        </Grid>
+                        
+                        <TextBlock Text="Velocity 建议分配 512MB - 1024MB 内存。" FontSize="12" Opacity="0.5"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Row 0, Col 1: Version Selection -->
+                <Border Grid.Row="0" Grid.Column="1" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="8" Padding="24">
+                    <StackPanel Spacing="20">
+                        <TextBlock Text="版本选择" FontSize="16" FontWeight="SemiBold"/>
+                        
+                        <ComboBox Header="Velocity 版本" 
+                                  ItemsSource="{x:Bind ViewModel.Versions, Mode=OneWay}"
+                                  SelectedItem="{x:Bind ViewModel.SelectedVersion, Mode=TwoWay}"
+                                  HorizontalAlignment="Stretch" PlaceholderText="选择版本"/>
+                                  
+                        <InfoBar Severity="Informational" IsOpen="True" IsClosable="False" 
+                                 Message="Velocity 是目前性能最好的 Minecraft 代理服务端，推荐使用最新版本。" />
+                    </StackPanel>
+                </Border>
+                
+                <!-- Row 1, Col 0: Java Environment (Moved to Left) -->
+                <Border Grid.Row="1" Grid.Column="0" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="8" Padding="24">
+                    <StackPanel Spacing="20">
+                        <TextBlock Text="运行环境" FontSize="16" FontWeight="SemiBold"/>
+                        
+                        <ComboBox Header="Java 版本" 
+                                  ItemsSource="{x:Bind ViewModel.JavaList, Mode=OneWay}"
+                                  SelectedItem="{x:Bind ViewModel.SelectedJava, Mode=TwoWay}"
+                                  HorizontalAlignment="Stretch" PlaceholderText="选择 Java 运行时">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="services:JavaInstallation">
+                                    <Grid Padding="0,4">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Spacing="2">
+                                            <TextBlock Text="{x:Bind Version}" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{x:Bind Path}" FontSize="11" Opacity="0.5" TextTrimming="CharacterEllipsis"/>
+                                        </StackPanel>
+                                        <Border Grid.Column="1" Background="{ThemeResource SystemControlBackgroundBaseLowBrush}" 
+                                                Padding="6,2" CornerRadius="4" VerticalAlignment="Center" Margin="8,0,0,0">
+                                            <TextBlock Text="{x:Bind Source}" FontSize="10" Opacity="0.8"/>
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        
+                        <TextBlock Text="Velocity 建议使用 Java 17 或更高版本。" FontSize="12" Opacity="0.5" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Row 1, Col 1: Preview Card (Moved to Right) -->
+                <Border Grid.Row="1" Grid.Column="1" Background="{ThemeResource SystemControlHighlightAccentBrush}" CornerRadius="8" Padding="24">
+                     <StackPanel Spacing="16">
+                         <TextBlock Text="配置预览" Foreground="White" FontWeight="Bold" FontSize="16"/>
+                         <Grid RowSpacing="12">
+                             <Grid.ColumnDefinitions>
+                                 <ColumnDefinition Width="Auto"/>
+                                 <ColumnDefinition Width="*"/>
+                             </Grid.ColumnDefinitions>
+                             <Grid.RowDefinitions>
+                                 <RowDefinition Height="Auto"/>
+                                 <RowDefinition Height="Auto"/>
+                                 <RowDefinition Height="Auto"/>
+                                 <RowDefinition Height="Auto"/>
+                             </Grid.RowDefinitions>
+                             
+                             <TextBlock Text="类型:" Foreground="White" Opacity="0.8"/>
+                             <TextBlock Grid.Column="1" Text="Velocity 代理群组" Foreground="White" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+                             
+                             <TextBlock Grid.Row="1" Text="端口:" Foreground="White" Opacity="0.8"/>
+                             <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind ViewModel.GroupPort, Mode=OneWay}" Foreground="White" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+                             
+                             <TextBlock Grid.Row="2" Text="核心:" Foreground="White" Opacity="0.8"/>
+                             <TextBlock Grid.Row="2" Grid.Column="1" Text="{x:Bind ViewModel.SelectedVersion, Mode=OneWay}" Foreground="White" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+                             
+                             <TextBlock Grid.Row="3" Text="名称:" Foreground="White" Opacity="0.8"/>
+                             <TextBlock Grid.Row="3" Grid.Column="1" Text="{x:Bind ViewModel.ServerName, Mode=OneWay}" Foreground="White" FontWeight="SemiBold" HorizontalAlignment="Right" TextTrimming="CharacterEllipsis" MaxWidth="150"/>
+                         </Grid>
+                     </StackPanel>
+                </Border>
+            </Grid>
+        </ScrollViewer>
+
+        <!-- 3. Footer Actions -->
+        <Grid Grid.Row="2" Margin="0,24,0,0" Padding="24,16" 
+              Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" CornerRadius="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" Foreground="Red" VerticalAlignment="Center"/>
+            
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12">
+                <Button Content="取消" Command="{x:Bind ViewModel.CancelCommand}" />
+                <Button Content="立即创建" Command="{x:Bind ViewModel.CreateCommand}" Style="{StaticResource AccentButtonStyle}" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

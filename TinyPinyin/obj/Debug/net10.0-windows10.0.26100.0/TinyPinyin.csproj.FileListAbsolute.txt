@@ -1,0 +1,11 @@
+D:\Desktop\ZMSL\TinyPinyin.Net-master\TinyPinyin\bin\Debug\net10.0-windows10.0.26100.0\TinyPinyin.deps.json
+D:\Desktop\ZMSL\TinyPinyin.Net-master\TinyPinyin\bin\Debug\net10.0-windows10.0.26100.0\TinyPinyin.dll
+D:\Desktop\ZMSL\TinyPinyin.Net-master\TinyPinyin\bin\Debug\net10.0-windows10.0.26100.0\TinyPinyin.pdb
+D:\Desktop\ZMSL\TinyPinyin.Net-master\TinyPinyin\obj\Debug\net10.0-windows10.0.26100.0\TinyPinyin.GeneratedMSBuildEditorConfig.editorconfig
+D:\Desktop\ZMSL\TinyPinyin.Net-master\TinyPinyin\obj\Debug\net10.0-windows10.0.26100.0\TinyPinyin.AssemblyInfoInputs.cache
+D:\Desktop\ZMSL\TinyPinyin.Net-master\TinyPinyin\obj\Debug\net10.0-windows10.0.26100.0\TinyPinyin.AssemblyInfo.cs
+D:\Desktop\ZMSL\TinyPinyin.Net-master\TinyPinyin\obj\Debug\net10.0-windows10.0.26100.0\TinyPinyin.csproj.CoreCompileInputs.cache
+D:\Desktop\ZMSL\TinyPinyin.Net-master\TinyPinyin\obj\Debug\net10.0-windows10.0.26100.0\TinyPinyin.dll
+D:\Desktop\ZMSL\TinyPinyin.Net-master\TinyPinyin\obj\Debug\net10.0-windows10.0.26100.0\refint\TinyPinyin.dll
+D:\Desktop\ZMSL\TinyPinyin.Net-master\TinyPinyin\obj\Debug\net10.0-windows10.0.26100.0\TinyPinyin.pdb
+D:\Desktop\ZMSL\TinyPinyin.Net-master\TinyPinyin\obj\Debug\net10.0-windows10.0.26100.0\ref\TinyPinyin.dll

@@ -1,0 +1,287 @@
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using ZMSL.App.Services;
+using ZMSL.App.Views;
+
+namespace ZMSL.App;
+
+public sealed partial class MainWindow : Window
+{
+    private readonly AuthService _authService;
+    private readonly ServerManagerService _serverManager;
+    private readonly FrpService _frpService;
+    private Microsoft.UI.Windowing.AppWindow? _appWindow;
+    private bool _isClosingConfirmed = false;
+    private bool _isDarkTheme = false; // 默认暗色主题
+
+    public MainWindow()
+    {
+        this.InitializeComponent();
+        _authService = App.Services.GetRequiredService<AuthService>();
+        _serverManager = App.Services.GetRequiredService<ServerManagerService>();
+        _frpService = App.Services.GetRequiredService<FrpService>();
+        
+        // 设置窗口大小
+        var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+        var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hwnd);
+        _appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
+        
+        // 设置窗口大小和最小尺寸
+        _appWindow.Resize(new Windows.Graphics.SizeInt32(1280, 800));
+        
+        // 设置最小窗口尺寸
+        var presenter = _appWindow.Presenter as Microsoft.UI.Windowing.OverlappedPresenter;
+        if (presenter != null)
+        {
+            presenter.IsResizable = true;
+            presenter.IsMaximizable = true;
+            presenter.IsMinimizable = true;
+        }
+        
+        // 设置窗口图标
+        try
+        {
+            var iconPath = System.IO.Path.Combine(AppContext.BaseDirectory, "Assets", "app-icon.ico");
+            if (System.IO.File.Exists(iconPath))
+            {
+                _appWindow.SetIcon(iconPath);
+            }
+        }
+        catch { /* 图标加载失败不影响启动 */ }
+        
+        // 设置窗口标题
+        _appWindow.Title = "智穗MC开服器";
+        
+        // 使用标准系统标题栏
+        _appWindow.TitleBar.ExtendsContentIntoTitleBar = false;
+        
+        // 监听窗口关闭事件
+        _appWindow.Closing += AppWindow_Closing;
+
+        // 使用 Mica 背景效果改善性能
+        this.SystemBackdrop = new Microsoft.UI.Xaml.Media.MicaBackdrop();
+        
+        // 初始化主题状态
+        UpdateThemeUI();
+        ApplyTheme();
+
+        // 订阅登录状态变化
+        _authService.LoginStateChanged += OnLoginStateChanged;
+        
+        // 检查登录状态，强制登录
+        CheckLoginAndNavigate();
+    }
+
+    private async void AppWindow_Closing(Microsoft.UI.Windowing.AppWindow sender, Microsoft.UI.Windowing.AppWindowClosingEventArgs args)
+    {
+        // 如果已经确认关闭，直接返回
+        if (_isClosingConfirmed) return;
+
+        var runningServers = _serverManager.GetRunningServerIds();
+        var frpConnected = _frpService.IsConnected;
+
+        // 如果有运行中的服务器或FRP连接
+        if (runningServers.Count > 0 || frpConnected)
+        {
+            args.Cancel = true; // 先取消关闭
+
+            var message = "以下服务将在关闭后停止:\n";
+            if (runningServers.Count > 0)
+                message += $"- {runningServers.Count} 个运行中的服务器\n";
+            if (frpConnected)
+                message += "- FRP 内网穿透连接\n";
+            message += "\n确定要关闭吗？";
+
+            var dialog = new ContentDialog
+            {
+                Title = "确认关闭",
+                Content = message,
+                PrimaryButtonText = "确定关闭",
+                CloseButtonText = "取消",
+                XamlRoot = Content.XamlRoot
+            };
+
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                // 停止所有服务
+                await _serverManager.StopAllServersAsync();
+                if (frpConnected)
+                    await _frpService.StopTunnelAsync();
+
+                _isClosingConfirmed = true;
+                _appWindow?.Destroy(); // 强制关闭
+            }
+        }
+    }
+
+    private void CheckLoginAndNavigate()
+    {
+        UpdateLoginState();
+        if (_authService.IsLoggedIn)
+        {
+            ContentFrame.Navigate(typeof(HomePage));
+            NavView.SelectedItem = NavView.MenuItems[0];
+        }
+        else
+        {
+            ContentFrame.Navigate(typeof(LoginPage));
+        }
+    }
+
+    private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+    {
+        if (args.SelectedItem is NavigationViewItem item)
+        {
+            var tag = item.Tag?.ToString();
+            
+            // 强制登录检查（首页和设置不需要登录）
+            if (!_authService.IsLoggedIn && tag != "Home" && tag != "Settings")
+            {
+                ContentFrame.Navigate(typeof(LoginPage));
+                return;
+            }
+            
+            Type? pageType = tag switch
+            {
+                "Home" => typeof(HomePage),
+                "ServerCore" => typeof(ServerCorePage),
+                "MyServer" => typeof(MyServerPage),
+                "LinuxNode" => typeof(LinuxNodePage),
+                "Frp" => typeof(FrpPage),
+                "Settings" => typeof(SettingsPage),
+                _ => null
+            };
+
+            if (pageType != null)
+            {
+                ContentFrame.Navigate(pageType);
+            }
+        }
+    }
+
+    private async void UserButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (_authService.IsLoggedIn)
+        {
+            // 显示用户菜单
+            var dialog = new ContentDialog
+            {
+                Title = "用户信息",
+                Content = $"当前用户: {_authService.CurrentUser?.Username}\n邮箱: {_authService.CurrentUser?.Email}",
+                PrimaryButtonText = "退出登录",
+                CloseButtonText = "关闭",
+                XamlRoot = Content.XamlRoot
+            };
+
+            var result = await dialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+            {
+                _authService.Logout();
+            }
+        }
+        else
+        {
+            // 打开登录页面
+            ContentFrame.Navigate(typeof(LoginPage));
+        }
+    }
+
+    private void OnLoginStateChanged(object? sender, EventArgs e)
+    {
+        DispatcherQueue.TryEnqueue(() =>
+        {
+            UpdateLoginState();
+            // 登录成功后跳转到首页
+            if (_authService.IsLoggedIn && ContentFrame.Content is LoginPage)
+            {
+                ContentFrame.Navigate(typeof(HomePage));
+                NavView.SelectedItem = NavView.MenuItems[0];
+            }
+        });
+    }
+
+    private void UpdateLoginState()
+    {
+        if (_authService.IsLoggedIn && _authService.CurrentUser != null)
+        {
+            UsernameText.Text = _authService.CurrentUser.Username;
+        }
+        else
+        {
+            UsernameText.Text = "未登录";
+        }
+    }
+
+    public void UpdateServerStatus(bool isRunning, string? serverName = null)
+    {
+        DispatcherQueue.TryEnqueue(() =>
+        {
+            ServerStatusIndicator.Fill = isRunning 
+                ? new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.LimeGreen)
+                : new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Gray);
+            ServerStatusText.Text = isRunning 
+                ? $"服务器: {serverName ?? "运行中"}"
+                : "服务器: 未运行";
+        });
+    }
+
+    public void UpdateFrpStatus(bool isConnected)
+    {
+        DispatcherQueue.TryEnqueue(() =>
+        {
+            FrpStatusIndicator.Fill = isConnected
+                ? new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.LimeGreen)
+                : new Microsoft.UI.Xaml.Media.SolidColorBrush(Microsoft.UI.Colors.Gray);
+            FrpStatusText.Text = isConnected ? "FRP: 已连接" : "FRP: 未连接";
+        });
+    }
+
+    public void SetStatus(string message)
+    {
+        DispatcherQueue.TryEnqueue(() =>
+        {
+            StatusText.Text = message;
+        });
+    }
+
+    private void ThemeToggle_Click(object sender, RoutedEventArgs e)
+    {
+        _isDarkTheme = !_isDarkTheme;
+        ApplyTheme();
+        UpdateThemeUI();
+    }
+
+    private void ApplyTheme()
+    {
+        // 应用主题到根元素
+        if (Content is FrameworkElement rootElement)
+        {
+            rootElement.RequestedTheme = _isDarkTheme ? ElementTheme.Dark : ElementTheme.Light;
+        }
+    }
+
+    private void UpdateThemeUI()
+    {
+        if (_isDarkTheme)
+        {
+            ThemeIcon.Glyph = "\uE793"; // 月亮图标
+        }
+        else
+        {
+            ThemeIcon.Glyph = "\uE706"; // 太阳图标
+        }
+    }
+
+    private void CloseButton_Click(object sender, RoutedEventArgs e)
+    {
+        this.Close();
+    }
+
+    private void SetDragRegionForCustomTitleBar()
+    {
+        // 让整个 AppTitleBar 可拖动，但按钮区域除外
+        // WinUI 3 会自动处理按钮区域的点击事件
+    }
+}

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentDialog
+    x:Class="ZMSL.App.Views.ServerSettingsDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="服务器设置"
+    PrimaryButtonText="保存"
+    CloseButtonText="取消"
+    DefaultButton="Primary"
+    PrimaryButtonClick="Save_Click">
+
+    <ScrollViewer Width="500" Height="520" VerticalScrollBarVisibility="Auto">
+        <StackPanel Spacing="16" Padding="0,0,12,0">
+
+            <!-- 服务器图标 -->
+            <StackPanel>
+                <TextBlock Text="服务器图标" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- 图标预览 -->
+                    <Border x:Name="IconPreviewBorder" Width="64" Height="64" CornerRadius="10" Margin="0,0,16,0"
+                            Background="{ThemeResource AccentFillColorDefaultBrush}">
+                        <Grid>
+                            <FontIcon x:Name="DefaultIconGlyph" Glyph="&#xE8F1;" FontSize="32" Foreground="White"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Image x:Name="CustomIconImage" Stretch="UniformToFill"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   Visibility="Collapsed"/>
+                        </Grid>
+                    </Border>
+                    <!-- 图标操作按钮 -->
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8">
+                        <Button Content="选择图片" Click="SelectIcon_Click" HorizontalAlignment="Stretch"/>
+                        <Button x:Name="ClearIconButton" Content="清除图标" Click="ClearIcon_Click"
+                                HorizontalAlignment="Stretch" Visibility="Collapsed"/>
+                        <TextBlock Text="支持 PNG、JPG、ICO 格式" FontSize="11" Opacity="0.6" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+
+            <!-- 基本信息 -->
+            <StackPanel>
+                <TextBlock Text="基本信息" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                <TextBox x:Name="ServerNameBox" Header="服务器名称"/>
+                <TextBox x:Name="EnglishAliasBox" Header="英文别名 (用于群组服配置)" Margin="0,8,0,0" PlaceholderText="自动生成的拼音别名"/>
+                <Grid Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="McVersionBox" Header="MC版本" Margin="0,0,8,0"/>
+                    <TextBox x:Name="CoreTypeBox" Header="核心类型" Grid.Column="1" IsReadOnly="True"/>
+                </Grid>
+                <InfoBar x:Name="ForgeReadOnlyInfo" Severity="Informational" IsOpen="False" Margin="0,8,0,0"
+                         Message="Forge/NeoForge 核心类型不可修改，以保证服务端正常运行。"/>
+            </StackPanel>
+
+            <!-- 启动核心 -->
+            <StackPanel>
+                <TextBlock Text="启动核心" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="JarFileBox" Header="JAR文件名" IsReadOnly="True"/>
+                    <Button x:Name="ChangeJarButton" Content="更换" Grid.Column="1" VerticalAlignment="Bottom" Margin="8,0,0,0" Click="ChangeJar_Click"/>
+                </Grid>
+                <TextBlock x:Name="JarPathText" Opacity="0.6" FontSize="11" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                <InfoBar x:Name="ForgeCoreReadOnlyInfo" Severity="Informational" IsOpen="False" Margin="0,8,0,0"
+                         Message="Forge/NeoForge 核心文件不可更换，以保证服务端正常运行。"/>
+            </StackPanel>
+
+            <!-- Java设置 -->
+            <StackPanel>
+                <TextBlock Text="Java设置" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox x:Name="JavaComboBox" Header="Java版本" PlaceholderText="选择Java" 
+                              DisplayMemberPath="DisplayName" HorizontalAlignment="Stretch"
+                              SelectionChanged="JavaComboBox_SelectionChanged"/>
+                    <Button Content="检测" Grid.Column="1" VerticalAlignment="Bottom" Margin="8,0,0,0" Click="DetectJava_Click"/>
+                </Grid>
+                <TextBlock x:Name="JavaPathText" Opacity="0.6" FontSize="11" TextWrapping="Wrap" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <!-- 内存设置 -->
+            <StackPanel>
+                <TextBlock Text="内存设置" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="MinMemoryBox" Header="最小内存 (MB)" Margin="0,0,8,0"/>
+                    <TextBox x:Name="MaxMemoryBox" Header="最大内存 (MB)" Grid.Column="1"/>
+                </Grid>
+            </StackPanel>
+
+            <!-- JVM参数 -->
+            <StackPanel>
+                <TextBlock Text="启动参数" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                <TextBox x:Name="JvmArgsBox" Header="JVM参数" PlaceholderText="-XX:+UseG1GC"/>
+                <TextBox x:Name="ServerPortBox" Header="服务器端口" Margin="0,8,0,0"/>
+                <TextBox x:Name="StartupCommandBox" Header="启动命令 (可选)" PlaceholderText="自定义完整启动命令，留空则自动生成" Margin="0,8,0,0"/>
+                <TextBlock Opacity="0.6" FontSize="11" Margin="0,4,0,0" TextWrapping="Wrap"
+                           Text="若填写此项，将直接执行此命令启动服务器。&#xA;示例: java -Xmx4G -jar server.jar nogui&#xA;注意: 仍会使用'Java设置'中选择的Java路径(如果命令以java开头且未指定完整路径)，以及'服务器路径'作为工作目录。"/>
+            </StackPanel>
+            
+            <!-- 第三方登录配置 -->
+            <StackPanel>
+                <TextBlock Text="第三方登录（authlib-injector）" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                <ToggleSwitch x:Name="EnableAuthlibSwitch" Header="启用第三方登录" Toggled="EnableAuthlibSwitch_Toggled"/>
+                <StackPanel x:Name="AuthlibPanel" Visibility="Collapsed" Margin="0,8,0,0">
+                    <TextBox x:Name="AuthlibUrlBox" Header="验证服务器地址" PlaceholderText="例如：littleskin.cn"/>
+                    <InfoBar Severity="Informational" IsOpen="True" Margin="0,8,0,0"
+                             Message="使用authlib-injector需要：&#xA;1. 在 server.properties 中将 online-mode 设为 true&#xA;2. 首次启用会自动下载 authlib-injector-1.2.7.jar&#xA;3. 重启服务器后生效"/>
+                    <TextBlock Opacity="0.6" FontSize="11" Margin="0,4,0,0" TextWrapping="Wrap">
+                        常用验证服务器：&#xA;• LittleSkin: littleskin.cn&#xA;• Blessing Skin: 你的域名&#xA;• Authlib Injector: 你的API地址
+                    </TextBlock>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- 服务器路径 -->
+            <StackPanel>
+                <TextBlock Text="服务器路径" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="ServerPathBox" IsReadOnly="True"/>
+                    <Button Content="打开" Grid.Column="1" Margin="8,0,0,0" Click="OpenFolder_Click"/>
+                </Grid>
+            </StackPanel>
+
+            <!-- 危险操作 -->
+            <StackPanel>
+                <TextBlock Text="危险操作" FontWeight="SemiBold" FontSize="16" Foreground="OrangeRed" Margin="0,0,0,10"/>
+                <Button Content="删除服务器" Click="DeleteServer_Click" Background="DarkRed"/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</ContentDialog>

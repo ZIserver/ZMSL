@@ -1,0 +1,55 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.26100.0</TargetPlatformMinVersion>
+    <AssemblyName>zmsl</AssemblyName>
+    <Product>智穗MC开服器</Product>
+    <Description>智穗MC开服器</Description>
+    <Title>智穗MC开服器</Title>
+    <RootNamespace>ZMSL.App</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>$(MSBuildProjectDirectory)\Assets\app-icon.ico</ApplicationIcon>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseWinUI>true</UseWinUI>
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <WindowsPackageType Condition="'$(BuildMsix)' == 'true'">MSIX</WindowsPackageType>
+    <WindowsPackageType Condition="'$(BuildMsix)' != 'true'">None</WindowsPackageType>
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <NoWarn></NoWarn>
+    <Version>3.1.0</Version>
+    <AssemblyVersion>3.1.0.0</AssemblyVersion>
+    <FileVersion>3.1.0.0</FileVersion>
+    <GenerateAppInstallerFile>false</GenerateAppInstallerFile>
+    <!-- 只保留中文和英文资源 -->
+    <SatelliteResourceLanguages>zh-CN;en-US</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\**" />
+    <None Include="AppxManifestValidation.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="CommunityToolkit.WinUI.Animations" Version="8.2.251219" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.5" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260101001" />
+    <!--<PackageReference Include="Microsoft.Windows.SDK.NET.Ref" Version="10.0.26100.4654" />
+    <PackageReference Include="Microsoft.Windows.SDK.NET.Targets" Version="10.0.26100.4654" />-->
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZMSL.Shared\ZMSL.Shared.csproj" />
+    <ProjectReference Include="..\TinyPinyin.Net-master\TinyPinyin\TinyPinyin.csproj" />
+  </ItemGroup>
+  
+</Project>

@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Page x:ConnectionId='1'
+    x:Class="ZMSL.App.Views.CreateModeSelectionPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                        >
+
+    <Grid Padding="24,20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 标题栏 -->
+        <Grid Margin="0,0,0,24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" Spacing="12">
+                <Border Background="{ThemeResource AccentFillColorDefaultBrush}"
+                        CornerRadius="8" Width="40" Height="40" VerticalAlignment="Center">
+                    <FontIcon Glyph="&#xE710;" Foreground="White" FontSize="20"/>
+                </Border>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="创建服务器" FontSize="20" FontWeight="Bold"/>
+                    <TextBlock Text="选择创建模式" FontSize="12" Opacity="0.6"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <!-- 模式选择卡片 - 两排布局，左图标右介绍 -->
+        <Grid Grid.Row="1" HorizontalAlignment="Stretch" Margin="40,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="16"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- 小白模式卡片 -->
+            <Button x:ConnectionId='3' x:Name="BeginnerModeButton" Grid.Row="0" Grid.Column="0"
+                                              
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1" CornerRadius="12" Padding="24"
+                    HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 左侧：图标和标签 -->
+                    <StackPanel VerticalAlignment="Center" Margin="0,0,24,0">
+                        <Border Background="{ThemeResource SystemFillColorSuccessBackgroundBrush}"
+                                CornerRadius="12" Width="64" Height="64" Margin="0,0,0,12">
+                            <FontIcon Glyph="&#xE9D9;" Foreground="White" FontSize="32"/>
+                        </Border>
+                        <Border HorizontalAlignment="Center" Background="{ThemeResource SystemFillColorSuccessBackgroundBrush}"
+                                CornerRadius="4" Padding="8,4">
+                            <TextBlock Text="推荐新手" FontSize="11" FontWeight="SemiBold" Foreground="White"/>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- 右侧：标题和描述 -->
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8">
+                        <TextBlock Text="小白模式" FontSize="18" FontWeight="Bold"/>
+                        <TextBlock Text="简单易用，快速上手" FontSize="13" Opacity="0.7"/>
+                        <StackPanel Spacing="6" Margin="0,8,0,0">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE73E;" FontSize="14" Foreground="{ThemeResource AccentFillColorDefaultBrush}"/>
+                                <TextBlock Text="智能推荐配置" FontSize="13"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE90A;" FontSize="14" Foreground="{ThemeResource AccentFillColorDefaultBrush}"/>
+                                <TextBlock Text="自动内存分配" FontSize="13"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE8FD;" FontSize="14" Foreground="{ThemeResource AccentFillColorDefaultBrush}"/>
+                                <TextBlock Text="默认Purpur核心" FontSize="13"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Button>
+
+            <!-- 高手模式卡片 -->
+            <Button x:ConnectionId='4' x:Name="AdvancedModeButton" Grid.Row="0" Grid.Column="2"
+                                              
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1" CornerRadius="12" Padding="24"
+                    HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 左侧：图标和标签 -->
+                    <StackPanel VerticalAlignment="Center" Margin="0,0,24,0">
+                        <Border Background="{ThemeResource SystemFillColorAttentionBackgroundBrush}"
+                                CornerRadius="12" Width="64" Height="64" Margin="0,0,0,12">
+                            <FontIcon Glyph="&#xF168;" Foreground="White" FontSize="32"/>
+                        </Border>
+                        <Border HorizontalAlignment="Center" Background="{ThemeResource SystemFillColorAttentionBackgroundBrush}"
+                                CornerRadius="4" Padding="8,4">
+                            <TextBlock Text="专业用户" FontSize="11" FontWeight="SemiBold" Foreground="White"/>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- 右侧：标题和描述 -->
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8">
+                        <TextBlock Text="高手模式" FontSize="18" FontWeight="Bold"/>
+                        <TextBlock Text="完全自定义配置" FontSize="13" Opacity="0.7"/>
+                        <StackPanel Spacing="6" Margin="0,8,0,0">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE90F;" FontSize="14" Foreground="{ThemeResource AccentFillColorDefaultBrush}"/>
+                                <TextBlock Text="手动内存调节" FontSize="13"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE9E9;" FontSize="14" Foreground="{ThemeResource AccentFillColorDefaultBrush}"/>
+                                <TextBlock Text="自定义JVM参数" FontSize="13"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xECAA;" FontSize="14" Foreground="{ThemeResource AccentFillColorDefaultBrush}"/>
+                                <TextBlock Text="任意核心版本" FontSize="13"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Button>
+
+            <!-- 整合包开服卡片 -->
+            <Button x:ConnectionId='5' x:Name="ModpackModeButton" Grid.Row="2" Grid.Column="0"
+                                             
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1" CornerRadius="12" Padding="24"
+                    HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 左侧：图标和标签 -->
+                    <StackPanel VerticalAlignment="Center" Margin="0,0,24,0">
+                        <Border Background="#FF9800"
+                                CornerRadius="12" Width="64" Height="64" Margin="0,0,0,12">
+                            <FontIcon Glyph="&#xE7B8;" Foreground="White" FontSize="32"/>
+                        </Border>
+                        <Border HorizontalAlignment="Center" Background="#FF9800"
+                                CornerRadius="4" Padding="8,4">
+                            <TextBlock Text="整合包" FontSize="11" FontWeight="SemiBold" Foreground="White"/>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- 右侧：标题和描述 -->
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8">
+                        <TextBlock Text="整合包开服" FontSize="18" FontWeight="Bold"/>
+                        <TextBlock Text="一键部署整合包" FontSize="13" Opacity="0.7"/>
+                        <StackPanel Spacing="6" Margin="0,8,0,0">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE896;" FontSize="14" Foreground="{ThemeResource AccentFillColorDefaultBrush}"/>
+                                <TextBlock Text="Modrinth整合包" FontSize="13"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE898;" FontSize="14" Foreground="{ThemeResource AccentFillColorDefaultBrush}"/>
+                                <TextBlock Text="本地上传整合包" FontSize="13"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE8F1;" FontSize="14" Foreground="{ThemeResource AccentFillColorDefaultBrush}"/>
+                                <TextBlock Text="自动安装Mod" FontSize="13"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Button>
+
+            <!-- 节点新建卡片 -->
+            <Button x:ConnectionId='6' x:Name="NodeModeButton" Grid.Row="2" Grid.Column="2"
+                                          
+                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1" CornerRadius="12" Padding="24"
+                    HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- 左侧：图标和标签 -->
+                    <StackPanel VerticalAlignment="Center" Margin="0,0,24,0">
+                        <Border Background="{ThemeResource AccentFillColorDefaultBrush}"
+                                CornerRadius="12" Width="64" Height="64" Margin="0,0,0,12">
+                            <FontIcon Glyph="&#xE968;" Foreground="White" FontSize="32"/>
+                        </Border>
+                        <Border HorizontalAlignment="Center" Background="{ThemeResource AccentFillColorDefaultBrush}"
+                                CornerRadius="4" Padding="8,4">
+                            <TextBlock Text="远程部署" FontSize="11" FontWeight="SemiBold" Foreground="White"/>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- 右侧：标题和描述 -->
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8">
+                        <TextBlock Text="节点新建" FontSize="18" FontWeight="Bold"/>
+                        <TextBlock Text="在远程节点创建" FontSize="13" Opacity="0.7"/>
+                        <StackPanel Spacing="6" Margin="0,8,0,0">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE753;" FontSize="14" Foreground="{ThemeResource AccentFillColorDefaultBrush}"/>
+                                <TextBlock Text="选择节点" FontSize="13"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE774;" FontSize="14" Foreground="{ThemeResource AccentFillColorDefaultBrush}"/>
+                                <TextBlock Text="自动检测Java" FontSize="13"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon Glyph="&#xE896;" FontSize="14" Foreground="{ThemeResource AccentFillColorDefaultBrush}"/>
+                                <TextBlock Text="一键下载核心" FontSize="13"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Button>
+        </Grid>
+
+        <!-- 底部按钮栏 -->
+        <Grid Grid.Row="2" Margin="0,24,0,0"
+              Background="{ThemeResource LayerFillColorDefaultBrush}"
+              BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+              BorderThickness="0,1,0,0" Padding="16">
+            <Button x:ConnectionId='2'                          Padding="16,10">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <FontIcon Glyph="&#xE72B;" FontSize="14"/>
+                    <TextBlock Text="返回" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Button>
+        </Grid>
+    </Grid>
+</Page>
+
