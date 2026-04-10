@@ -6,9 +6,9 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="WeiMo.MC"
-    Publisher="CN=1EE206AC-AC8A-431D-96B3-FB09CA2F4964"
-    Version="3.1.0.0" />
+    Name=""
+    Publisher="CN="
+    Version="" />
 
   <Properties>
     <DisplayName>智穗MC开服器</DisplayName>
