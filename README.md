@@ -1,0 +1,2 @@
+# ZMSL
+ZMSL智穗MC开服器
